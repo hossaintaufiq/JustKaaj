@@ -8,6 +8,37 @@ import Footer from "@/Component/Shared/Footer";
 import { allCategories, categoryDetails, providersByCategory } from "../../categoriesData";
 
 // Mock provider data - this will come from your backend
+
+
+//  new interfaces applied 
+interface Availability {
+  day: string;
+  time: string;
+}
+
+interface Review {
+  user: string;
+  rating: number;
+  comment: string;
+}
+
+interface Provider {
+  id: string;
+  name: string;
+  description: string;
+  rating: number;
+  experience: string;
+  location: string;
+  verified: boolean;
+  responseTime: string;
+  pricing: string;
+  services: string[];
+  availability: Availability[];
+  reviews: Review[];
+}
+
+
+// new interfaces ends 
 const getProviderData = (category: string, providerId: string) => {
   const providers = providersByCategory[category] || [];
   const provider = providers[parseInt(providerId) || 0] || providers[0];
@@ -52,8 +83,8 @@ export default function ServiceDetailsPage() {
   const router = useRouter();
   const category = decodeURIComponent(params.category as string);
   const providerId = params.providerId as string;
-  
-  const [provider, setProvider] = useState<any>(null);
+
+  const [provider, setProvider] = useState<Provider | null>(null);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [serviceType, setServiceType] = useState("");
@@ -132,7 +163,12 @@ export default function ServiceDetailsPage() {
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center">
                     <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-2xl mr-4">
-                      {provider.name.split(" ").map(n => n[0]).join("").toUpperCase()}
+                      {
+                      // provider.name.split(" ").map(n => n[0]).join("").toUpperCase()
+                      // new code 
+                      provider.name.split(" ").map((n: string) => n[0]).join("").toUpperCase()
+
+                      }
                     </div>
                     <div>
                       <h1 className="text-2xl font-bold text-gray-900 mb-1">{provider.name}</h1>
@@ -196,7 +232,7 @@ export default function ServiceDetailsPage() {
               <div className="bg-white rounded-xl shadow-md p-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">Availability</h2>
                 <div className="space-y-2">
-                  {provider.availability.map((day: any, index: number) => (
+                  {provider.availability.map((day:{ day:string,time:string}, index: number) => (
                     <div key={index} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-b-0">
                       <span className="font-medium text-gray-700">{day.day}</span>
                       <span className="text-gray-600">{day.time}</span>
@@ -209,7 +245,7 @@ export default function ServiceDetailsPage() {
               <div className="bg-white rounded-xl shadow-md p-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">Customer Reviews</h2>
                 <div className="space-y-4">
-                  {provider.reviews.map((review: any, index: number) => (
+                  {provider.reviews.map((review: { user: string; rating: number; comment: string }, index: number) => (
                     <div key={index} className="border-b border-gray-100 pb-4 last:border-b-0">
                       <div className="flex items-center justify-between mb-2">
                         <span className="font-medium text-gray-900">{review.user}</span>
