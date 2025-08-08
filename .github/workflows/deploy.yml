@@ -25,12 +25,12 @@ jobs:
             git pull origin main
 
             # Backend setup
-            cd Server
+            cd server
             npm install
-            pm2 restart Server || pm2 start index.js --name Server
+            pm2 restart server || pm2 start index.js --name server
 
             # Frontend setup
-            cd ../Client
+            cd ../client
             npm install
             npm run build
 
