@@ -71,4 +71,4 @@ npm run dev
 
 ## Deployment
 
-Deploy easily on [Vercel](https://vercel.com/) for frontend or any platform supporting Node.js for backend.
+The Website is deloyed in Hostinger vps
