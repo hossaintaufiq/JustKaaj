@@ -20,18 +20,20 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
+            set -e  # Stop on error
+
             cd /var/www/justkaaj
             git reset --hard
             git pull origin main
 
             # Backend setup
             cd Server
-            npm install
+            npm ci  # faster, clean install
             pm2 restart Server || pm2 start index.js --name Server
 
             # Frontend setup
             cd ../Client
-            npm install
+            npm ci  # faster, clean install
             npm run build
 
             # Deploy frontend build to Nginx root
