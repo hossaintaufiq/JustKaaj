@@ -25,14 +25,14 @@ jobs:
             git pull origin main
 
             # Backend setup
-            cd server
+            cd Server
             npm install
-            pm2 restart server || pm2 start index.js --name server
+            pm2 restart Server || pm2 start index.js --name Server
 
             # Frontend setup
-            cd ../client
+            cd ../Client
             npm install
             npm run build
 
             # Deploy frontend build to Nginx root
-            cp -r dist/* /var/www/html/
+            cp -r .next/* /var/www/html/
