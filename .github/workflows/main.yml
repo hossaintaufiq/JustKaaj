@@ -1,0 +1,38 @@
+name: Auto Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /var/www/justkaaj
+            git reset --hard
+            git pull origin main
+
+            # Backend setup
+            cd Server
+            npm install
+            pm2 restart Server || pm2 start index.js --name Server
+
+            # Frontend setup
+            cd ../Client
+            npm install
+            npm run build
+
+            # Deploy frontend build to Nginx root
+            cp -r dist/* /var/www/html/
