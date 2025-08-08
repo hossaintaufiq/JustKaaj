@@ -225,19 +225,13 @@ export default function Navbar() {
             <div className="pt-2 border-t border-gray-200">
               <p className="text-sm font-medium text-gray-500 mb-2">Legal</p>
               <Link 
-                href="/privacy" 
+                href="/privacy-policy-terms" 
                 className="block text-lg font-medium py-2 text-gray-700 hover:text-green-500"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Privacy Policy
+                Privacy Policy & Terms of Use
               </Link>
-              <Link 
-                href="/terms" 
-                className="block text-lg font-medium py-2 text-gray-700 hover:text-green-500"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Terms & Conditions
-              </Link>
+              
             </div>
             
             {/* Mobile Auth and Profile Buttons */}
