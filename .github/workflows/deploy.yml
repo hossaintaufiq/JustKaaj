@@ -36,3 +36,5 @@ jobs:
 
             # Deploy frontend build to Nginx root
             cp -r .next/* /var/www/html/
+
+
