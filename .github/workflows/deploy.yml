@@ -21,20 +21,16 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd /var/www/justkaaj
-            git reset --hard
-            git pull origin main
+            git fetch origin main
+            git reset --hard origin/main
 
-            # Backend setup
+            # Backend
             cd Server
-            npm install
+            npm install --production
             pm2 restart Server || pm2 start index.js --name Server
 
-            # Frontend setup
+            # Frontend (Next.js SSR)
             cd ../Client
-            npm install
+            npm install --production
             npm run build
-
-            # Deploy frontend build to Nginx root
-            cp -r .next/* /var/www/html/
-
-
+            pm2 restart Client || pm2 start npm --name Client -- start
