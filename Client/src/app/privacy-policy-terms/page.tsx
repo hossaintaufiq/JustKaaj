@@ -153,7 +153,7 @@ export default function PrivacyPolicyTermsPage() {
                 4. Data Privacy & Security
               </h2>
               <p className="text-gray-600 mb-4">
-                At JustKaaj, we are committed to protecting your personal information.
+                At JustKaaj, we are committed to protecting your personal Information.
               </p>
               
               <h3 className="text-xl font-semibold text-gray-800 mb-3">
