@@ -27,7 +27,8 @@ jobs:
             # Backend
             cd Server
             npm install --production
-            pm2 restart Server || pm2 start index.js --name Server
+            npm run build 
+            pm2 restart Server || pm2 start dist/server.js --name Server
 
             # Frontend (Next.js SSR)
             cd ../Client
