@@ -34,4 +34,4 @@ jobs:
             cd ../Client
             npm install 
             npm run build
-            pm2 restart Client || pm2 start npm --name Client -- start
+            pm2 restart Client --update-env || pm2 start npm --name Client -- start
