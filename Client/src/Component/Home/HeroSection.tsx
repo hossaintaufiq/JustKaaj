@@ -16,7 +16,7 @@
 //   // Handle search input
 //   const handleSearch = (query: string) => {
 //     setSearchQuery(query);
-    
+
 //     if (query.trim() === "") {
 //       setSearchResults([]);
 //       setShowResults(false);
@@ -26,7 +26,7 @@
 //     const filtered = allCategories.filter(category =>
 //       category.toLowerCase().includes(query.toLowerCase())
 //     );
-    
+
 //     setSearchResults(filtered.slice(0, 8)); // Limit to 8 results
 //     setShowResults(true);
 //   };
@@ -76,7 +76,7 @@
 //             anytime, anywhere
 //           </h1>
 //           <p className="text-gray-500 text-sm sm:text-base mb-6 max-w-lg mx-auto lg:mx-0">
-//             We provide comprehensive solutions for all your needs - from home services 
+//             We provide comprehensive solutions for all your needs - from home services
 //             to professional care, connecting you with verified experts across Bangladesh.
 //           </p>
 
@@ -139,29 +139,27 @@
 //             </form>
 //           </div>
 
-//           <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 max-w-xs mx-auto lg:mx-0">
-//             <button 
-//               onClick={() => router.push('/login')}
-//               className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-md text-sm font-medium w-full sm:w-auto"
-//             >
-//               Get Start Now
-//             </button>
-//             <button 
-//               onClick={() => router.push('/service')}
-//               className="border border-gray-700 hover:border-gray-400 px-6 py-3 rounded-md text-sm font-medium text-gray-700 w-full sm:w-auto"
-//             >
-//               View all Services
-//             </button>
-//           </div>
+          // <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 max-w-xs mx-auto lg:mx-0">
+          //   <button
+          //     onClick={() => router.push('/login')}
+          //     className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-md text-sm font-medium w-full sm:w-auto"
+          //   >
+          //     Get Start Now
+          //   </button>
+          //   <button
+          //     onClick={() => router.push('/service')}
+          //     className="border border-gray-700 hover:border-gray-400 px-6 py-3 rounded-md text-sm font-medium text-gray-700 w-full sm:w-auto"
+          //   >
+          //     View all Services
+          //   </button>
+          // </div>
 //         </div>
 //       </div>
 //     </section>
 //   );
 // }
 
-
-
-// new code 
+// new code
 
 "use client";
 
@@ -186,7 +184,7 @@ export default function HeroSection() {
       setShowResults(false);
       return;
     }
-    const filtered = allCategories.filter(category =>
+    const filtered = allCategories.filter((category) =>
       category.toLowerCase().includes(query.toLowerCase())
     );
     setSearchResults(filtered.slice(0, 8));
@@ -201,7 +199,10 @@ export default function HeroSection() {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
         setShowResults(false);
       }
     };
@@ -250,8 +251,9 @@ export default function HeroSection() {
             anytime, anywhere
           </h1>
           <p className="text-gray-100 text-sm sm:text-base mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed">
-            We provide comprehensive solutions for all your needs - from home services 
-            to professional care, connecting you with verified experts across Bangladesh.
+            We provide comprehensive solutions for all your needs - from home
+            services to professional care, connecting you with verified experts
+            across Bangladesh.
           </p>
 
           {/* Search Bar */}
@@ -291,10 +293,16 @@ export default function HeroSection() {
                       onClick={() => handleResultClick(category)}
                       className="w-full px-4 py-3 text-left hover:bg-green-50 border-b border-gray-100 last:border-b-0 transition-colors"
                     >
-                      <div className="font-medium text-gray-900">{category}</div>
+                      <div className="font-medium text-gray-900">
+                        {category}
+                      </div>
                       {categoryDetails[category] && (
                         <div className="text-sm text-gray-500 mt-1">
-                          {categoryDetails[category].description.substring(0, 60)}...
+                          {categoryDetails[category].description.substring(
+                            0,
+                            60
+                          )}
+                          ...
                         </div>
                       )}
                     </button>
@@ -314,20 +322,23 @@ export default function HeroSection() {
           </div>
 
           {/* Buttons */}
-          <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 max-w-xs mx-auto lg:mx-0 w-full">
-            <button 
+                    <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 max-w-xs mx-auto lg:mx-0">
+            <button
               onClick={() => router.push('/login')}
-              className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg text-base font-medium w-full sm:w-auto shadow-md transition"
+              className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-md text-sm font-medium w-full sm:w-auto"
             >
               Get Start Now
             </button>
-            <button 
+            <button
               onClick={() => router.push('/service')}
-              className="bg-white bg-opacity-80 border border-gray-300 hover:bg-opacity-100 px-6 py-3 rounded-lg text-base font-medium text-gray-800 w-full sm:w-auto shadow-sm transition"
+              className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-md text-sm font-medium w-full sm:w-auto"
             >
+            
               View all Services
             </button>
           </div>
+
+          
         </div>
       </div>
     </section>
