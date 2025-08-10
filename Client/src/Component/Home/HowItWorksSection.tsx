@@ -30,17 +30,17 @@ export default function HowItWorksSection() {
           <ol className="relative border-l-2 border-green-200 ml-6">
             <li className="mb-10 ml-6">
               <span className="absolute -left-7 flex items-center justify-center w-10 h-10 bg-green-500 rounded-full text-white font-bold text-lg">1</span>
-              <h3 className="font-bold text-lg mb-1">Select the Service</h3>
+              <h3 className="font-bold text-lg mb-1 text-gray-600">Select the Service</h3>
               <p className="text-gray-600">Pick the service you are looking for– from the website or the app.</p>
             </li>
             <li className="mb-10 ml-6">
               <span className="absolute -left-7 flex items-center justify-center w-10 h-10 bg-green-500 rounded-full text-white font-bold text-lg">2</span>
-              <h3 className="font-bold text-lg mb-1">Pick your schedule</h3>
+              <h3 className="font-bold text-lg mb-1 text-gray-600">Pick your schedule</h3>
               <p className="text-gray-600">Pick your convenient date and time to avail the service. Pick the service provider based on their rating.</p>
             </li>
             <li className="ml-6">
               <span className="absolute -left-7 flex items-center justify-center w-10 h-10 bg-green-500 rounded-full text-white font-bold text-lg">3</span>
-              <h3 className="font-bold text-lg mb-1">Place Your Order & Relax</h3>
+              <h3 className="font-bold text-lg mb-1 text-gray-600">Place Your Order & Relax</h3>
               <p className="text-gray-600">Review and place the order. Now just sit back and relax. We&apos;ll assign the expert service provider&apos;s schedule for you.</p>
             </li>
           </ol>
