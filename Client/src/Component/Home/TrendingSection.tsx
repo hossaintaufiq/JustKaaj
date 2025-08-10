@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaArrowRight } from 'react-icons/fa';
@@ -27,15 +28,19 @@ export default function TrendingSection() {
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-green-700">Trending</h2>
-          <Link href="/service" className="flex items-center gap-2 text-green-600 hover:text-green-800 font-medium text-sm px-3 py-2 rounded transition">
+          <Link
+            href="/service"
+            className="flex items-center gap-2 text-green-600 hover:text-green-800 font-medium text-sm px-3 py-2 rounded transition"
+          >
             View All <FaArrowRight />
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {trending.map((item, idx) => (
-            <div
+            <Link
               key={idx}
-              className="bg-green-50 rounded-xl shadow hover:shadow-lg transition flex flex-col items-center p-3"
+              href={`/service?name=${encodeURIComponent(item.name)}`} // Pass service name as query
+              className="bg-green-50 rounded-xl shadow hover:shadow-lg transition flex flex-col items-center p-3 cursor-pointer"
             >
               <div className="w-full aspect-[4/3] relative mb-3">
                 <Image
@@ -47,10 +52,10 @@ export default function TrendingSection() {
                 />
               </div>
               <div className="mt-2 text-center font-bold text-lg text-gray-900">{item.name}</div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
     </section>
   );
-} 
+}
