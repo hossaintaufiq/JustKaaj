@@ -1,4 +1,3 @@
-
 import Navbar from "@/Component/Shared/Navbar";
 import Footer from "@/Component/Shared/Footer";
 import type { Metadata } from "next";
@@ -92,8 +91,8 @@ export default function ContactPage() {
             {/* Google Map */}
             <div className="mt-8 rounded-lg overflow-hidden shadow-md border border-green-100">
               <iframe
-                title="JustKaaj Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.88925742496!2d90.41924667512987!3d23.75090078908009!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c7a6f6b94c3b%3A0x85b1d35ef39b3c3!2sPolice%20Plaza%20Concord%2C%20Dhaka%201212!5e0!3m2!1sen!2sbd!4v1691837150053!5m2!1sen!2sbd"
+                title="Police Plaza Location"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.506850946247!2d90.41422657512984!3d23.77293488907351!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c7a6e4fd15c7%3A0xbab66d76c3f4ed9c!2sPolice%20Plaza%20Concord!5e0!3m2!1sen!2sbd!4v1691837150053!5m2!1sen!2sbd"
                 width="100%"
                 height="300"
                 style={{ border: 0 }}
@@ -108,4 +107,3 @@ export default function ContactPage() {
     </div>
   );
 }
-
