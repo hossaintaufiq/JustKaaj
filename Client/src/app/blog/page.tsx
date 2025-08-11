@@ -115,7 +115,7 @@ export default function BlogPage() {
         </div>
 
         {/* Newsletter Section */}
-        <div className="bg-green-600 py-12 sm:py-16">
+        {/* <div className="bg-green-600 py-12 sm:py-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
             <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
               Stay Updated
@@ -134,7 +134,7 @@ export default function BlogPage() {
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       <Footer />
     </div>

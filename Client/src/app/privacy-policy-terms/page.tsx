@@ -237,14 +237,6 @@ export default function PrivacyPolicyTermsPage() {
                     <span className="mr-2">📧</span>
                     <span>Email: support@justkaaj.com</span>
                   </li>
-                  <li className="flex items-center">
-                    <span className="mr-2">📞</span>
-                    <span>Phone: [Insert Helpline Number]</span>
-                  </li>
-                  <li className="flex items-center">
-                    <span className="mr-2">🌐</span>
-                    <span>Website: www.justkaaj.com</span>
-                  </li>
                 </ul>
               </div>
             </div>
