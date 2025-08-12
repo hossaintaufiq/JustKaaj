@@ -3,7 +3,7 @@ import { z } from 'zod';
 const addressSchema = z.object({
   street_address: z.string(),
   city: z.string(),
-  state: z.string().length(2), // Assuming US state code
+  state: z.string(),
   postal_code: z.number(),
   latitude: z.number().min(-90).max(90),
   longitude: z.number().min(-180).max(180),
