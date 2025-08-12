@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
+import { RegisterUser } from "@/types";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 
-export const Register = async (userdata: any) => {
+export const Register = async (userdata: RegisterUser) => {
   try {
-    const res = await fetch("http://localhost:3000/api/auth/register", {
-      method: "POSOT",
+    const res = await fetch("http://localhost:5000/api/user/create-user", {
+      method: "POST",
       headers: {
-        "CONTENT-TYPE": "application/json",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(userdata),
     });
@@ -27,7 +28,7 @@ export const Register = async (userdata: any) => {
 
 export const Login = async (userdata: any) => {
   try {
-    const res = await fetch("", {
+    const res = await fetch("http://147.79.68.37:5000/api/auth/login", {
       method: "POST",
       headers: {
         "CONTENT-TYPE": "application/json",
