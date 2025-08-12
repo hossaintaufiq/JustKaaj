@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { Path, useForm, get } from "react-hook-form";
 import { useState } from "react";
 import Link from "next/link";
 import Navbar from "@/Component/Shared/Navbar";
@@ -267,32 +267,34 @@ export default function Registration() {
             )}
 
             {/* Terms & Conditions Agreement */}
+              <div className="flex items-start">
+                <input
+                  type="checkbox"
+                  {...register("agree" as Path<RegisterUser>, {
+                    required:
+                      "You must agree to the Privacy Policy and Terms of Use",
+                  })}
+                  className="mt-1 mr-2"
+                />
+                <label className="text-sm text-gray-700">
+                  I have read and agree to the{" "}
+                  <Link
+                    href="/privacy-policy-terms"
+                    className="text-green-500 hover:underline"
+                  >
+                    Privacy Policy & Terms of Use
+                  </Link>
+                  .
+                </label>
+              </div>
+
+              {/* Error message */}
+              {get(errors, "agree") && (
+                <p className="text-red-500 text-xs mt-1">
+                  {get(errors, "agree")?.message}
+                </p>
+              )}
             
-            <div className="flex items-start">
-              <input
-                type="checkbox"
-                {...register("agree", {
-                  required:
-                    "You must agree to the Privacy Policy and Terms of Use",
-                })}
-                className="mt-1 mr-2"
-              />
-              <label className="text-sm text-gray-700">
-                I have read and agree to the{" "}
-                <Link
-                  href="/privacy-policy-terms"
-                  className="text-green-500 hover:underline"
-                >
-                  Privacy Policy & Terms of Use
-                </Link>{" "}
-                .
-              </label>
-            </div>
-            {errors.agree && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.agree.message}
-              </p>
-            )}
 
             {/* Submit */}
             <button
