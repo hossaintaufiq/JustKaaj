@@ -5,15 +5,8 @@ import { useState } from "react";
 import Link from "next/link";
 import Navbar from "@/Component/Shared/Navbar";
 import Footer from "@/Component/Shared/Footer";
-
-type RegisterValues = {
-  name: string;
-  email: string;
-  password: string;
-  company?: string;
-  phone?: string;
-  privacyConsent: boolean;
-};
+import { Register } from "@/service/Auth";
+import { RegisterUser } from "@/types";
 
 export default function Registration() {
   const [activeTab, setActiveTab] = useState<"user" | "provider">("user");
@@ -23,11 +16,24 @@ export default function Registration() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<RegisterValues>();
+  } = useForm<RegisterUser>();
 
-  const onSubmit = (data: RegisterValues) => {
-    console.log("Form submitted:", data);
-    reset();
+  const onSubmit = async (data: RegisterUser) => {
+    try {
+      const response = await Register(data);
+      console.log(response);
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log("API response:", result);
+      reset();
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      // Optionally show error to the user
+    }
   };
 
   return (
@@ -65,7 +71,7 @@ export default function Registration() {
 
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            {/* Name */}
+            {/* Full Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Full Name
@@ -73,13 +79,15 @@ export default function Registration() {
               <input
                 type="text"
                 placeholder="Your name"
-                {...register("name", { required: "Name is required" })}
+                {...register("fullName", { required: "Full name is required" })}
                 className={`w-full px-4 py-2 rounded-md border text-gray-900 placeholder:text-gray-400 ${
-                  errors.name ? "border-red-500" : "border-gray-300"
+                  errors.fullName ? "border-red-500" : "border-gray-300"
                 } focus:outline-none focus:border-green-500`}
               />
-              {errors.name && (
-                <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>
+              {errors.fullName && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.fullName.message}
+                </p>
               )}
             </div>
 
@@ -102,6 +110,27 @@ export default function Registration() {
                 </p>
               )}
             </div>
+            {/* Password */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Phone Number
+              </label>
+              <input
+                type="text"
+                placeholder="01XXXXXXXXX"
+                {...register("phone", {
+                  required: "Phone number is required",
+                })}
+                className={`w-full px-4 py-2 rounded-md border text-gray-900 placeholder:text-gray-400 ${
+                  errors.phone ? "border-red-500" : "border-gray-300"
+                } focus:outline-none focus:border-green-500`}
+              />
+              {errors.phone && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.phone.message}
+                </p>
+              )}
+            </div>
 
             {/* Password */}
             <div>
@@ -121,6 +150,71 @@ export default function Registration() {
                   {errors.password.message}
                 </p>
               )}
+            </div>
+
+            {/* Address Section — Common for all */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Street Address
+                </label>
+                <input
+                  type="text"
+                  placeholder="123 Main St"
+                  {...register("address.street_address", {
+                    required: "Street is required",
+                  })}
+                  className={`w-full px-4 py-2 rounded-md border text-gray-900 placeholder:text-gray-400 ${
+                    errors.address?.street_address
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  } focus:outline-none focus:border-green-500`}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  City
+                </label>
+                <input
+                  type="text"
+                  placeholder="Dhaka"
+                  {...register("address.city", {
+                    required: "City is required",
+                  })}
+                  className={`w-full px-4 py-2 rounded-md border text-gray-900 placeholder:text-gray-400 ${
+                    errors.address?.city ? "border-red-500" : "border-gray-300"
+                  } focus:outline-none focus:border-green-500`}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  State
+                </label>
+                <input
+                  type="text"
+                  placeholder="Dhaka Division"
+                  {...register("address.state")}
+                  className="w-full px-4 py-2 rounded-md border border-gray-300 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-green-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Postal Code
+                </label>
+                <input
+                  type="number"
+                  placeholder="1205"
+                  {...register("address.postal_code", {
+                    required: "Postal code is required",
+                    valueAsNumber: true,
+                  })}
+                  className={`w-full px-4 py-2 rounded-md border text-gray-900 placeholder:text-gray-400 ${
+                    errors.address?.postal_code
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  } focus:outline-none focus:border-green-500`}
+                />
+              </div>
             </div>
 
             {/* Extra fields for service provider */}
@@ -170,31 +264,6 @@ export default function Registration() {
                   )}
                 </div>
               </>
-            )}
-
-            {/* Privacy Consent */}
-            <div className="flex items-start space-x-2">
-              <input
-                type="checkbox"
-                id="privacyConsent"
-                {...register("privacyConsent", { 
-                  required: "You must agree to our Privacy Policy and Terms & Conditions" 
-                })}
-                className="mt-1 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
-              />
-              <label htmlFor="privacyConsent" className="text-sm text-gray-600">
-                I agree to the{" "}
-                <Link href="/privacy-policy-terms" className="text-green-500 hover:underline">
-                  Privacy Policy & Terms of Use
-                </Link>{" "}
-                and{" "}
-                <Link href="/terms" className="text-green-500 hover:underline">
-                  Terms & Conditions
-                </Link>
-              </label>
-            </div>
-            {errors.privacyConsent && (
-              <p className="text-red-500 text-xs mt-1">{errors.privacyConsent.message}</p>
             )}
 
             {/* Submit */}

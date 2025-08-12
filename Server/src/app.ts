@@ -9,7 +9,12 @@ import { PCategoryRoute } from './app/module/parent_category/parent_category.rou
 import { ServiceCategoryRoute } from './app/module/service_category/serviceCategory.route';
 
 const app: Application = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: ['http://localhost:3000'],
+    credentials: true,
+  })
+);
 
 //parser
 app.use(express.json());
