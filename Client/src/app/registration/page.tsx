@@ -243,7 +243,7 @@ export default function Registration() {
                 </div>
 
                 {/* Phone */}
-                <div>
+                {/* <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Phone Number
                   </label>
@@ -262,7 +262,7 @@ export default function Registration() {
                       {errors.phone.message}
                     </p>
                   )}
-                </div>
+                </div> */}
               </>
             )}
 
