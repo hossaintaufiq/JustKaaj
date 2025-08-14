@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request } from 'express';
-import { PrismaClient } from '../../../../generated/prisma';
+import { PrismaClient, UserRole } from '../../../../generated/prisma';
 import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
@@ -39,7 +39,7 @@ const createAdminIntoDb = async (req: Request) => {
   };
   const result = prisma.$transaction(async (trns) => {
     const user = await trns.user.create({
-      data: userData,
+      data: { ...userData, role: UserRole.ADMIN },
     });
     const setAddress = await trns.address.create({
       data: {
@@ -67,7 +67,7 @@ const createServicePorvider = async (req: Request) => {
     password: hashedPassword,
     fullName: data.fullName,
     phone: data.phone,
-    role: data.role,
+    role: UserRole.SERVICE_PROVIDER,
   };
   const keyToRemove = ['password', 'role', 'phone'];
   keyToRemove.forEach((key) => delete providerData[key]);

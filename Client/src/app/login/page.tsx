@@ -27,6 +27,7 @@ export default function Login() {
   const onSubmit = async (data: FormValues) => {
     try {
       const res = await LoginUser(data);
+      console.log(res);
       if (res?.success) {
         toast.success(res?.message);
         if (redirect) {

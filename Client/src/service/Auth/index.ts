@@ -27,7 +27,7 @@ export const Register = async (userdata: RegisterUser) => {
 
 export const LoginUser = async (userdata: TLoginUser) => {
   try {
-    const res = await fetch("http://147.79.68.37:5000/api/auth/login", {
+    const res = await fetch("http://localhost:5000/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

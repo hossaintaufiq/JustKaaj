@@ -22,9 +22,9 @@ export default function Registration() {
   const router = useRouter();
 
   const onSubmit = async (data: RegisterUser) => {
-    console.log(data);
     try {
       const res = await Register(data);
+      console.log(res);
       if (res?.success) {
         toast.success(res?.message);
         router.push("/");
