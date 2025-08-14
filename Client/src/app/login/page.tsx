@@ -4,6 +4,9 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import Navbar from "@/Component/Shared/Navbar";
 import Footer from "@/Component/Shared/Footer";
+import { toast } from "sonner";
+import { useRouter, useSearchParams } from "next/navigation";
+import { LoginUser } from "@/service/Auth";
 
 type FormValues = {
   email: string;
@@ -17,8 +20,26 @@ export default function Login() {
     formState: { errors },
   } = useForm<FormValues>();
 
-  const onSubmit = (data: FormValues) => {
-    console.log(data);
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirectPath");
+  const router = useRouter();
+
+  const onSubmit = async (data: FormValues) => {
+    try {
+      const res = await LoginUser(data);
+      if (res?.success) {
+        toast.success(res?.message);
+        if (redirect) {
+          router.push(redirect);
+        } else {
+          router.push("/");
+        }
+      } else {
+        toast.error(res?.message);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -82,13 +103,19 @@ export default function Login() {
 
           <p className="text-sm text-gray-600 mt-4 text-center">
             Don&apos;t have an account?{" "}
-            <Link href="/registration" className="text-green-500 hover:underline">
+            <Link
+              href="/registration"
+              className="text-green-500 hover:underline"
+            >
               Sign Up
             </Link>
           </p>
           <p className="text-xs text-gray-500 mt-2 text-center">
             By logging in, you agree to our{" "}
-            <Link href="/privacy-policy-terms" className="text-green-500 hover:underline">
+            <Link
+              href="/privacy-policy-terms"
+              className="text-green-500 hover:underline"
+            >
               Privacy Policy & Terms of Use
             </Link>{" "}
             and{" "}
