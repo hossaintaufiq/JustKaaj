@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
-import { IUser, RegisterUser } from "@/types";
+import { IUser, RegisterUser, TLoginUser } from "@/types";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 
@@ -26,7 +25,7 @@ export const Register = async (userdata: RegisterUser) => {
   }
 };
 
-export const Login = async (userdata: any) => {
+export const LoginUser = async (userdata: TLoginUser) => {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/login`, {
       method: "POST",
@@ -39,6 +38,7 @@ export const Login = async (userdata: any) => {
     if (result.success) {
       (await cookies()).set("accessToken", result.data.accessToken);
     }
+    return result;
   } catch (error) {
     console.error("Error during login:", error);
     throw new Error("Login failed");

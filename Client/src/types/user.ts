@@ -24,3 +24,8 @@ export type RegisterUser = {
     longitude: number;
   };
 };
+
+export type TLoginUser = {
+  email: string;
+  password: string;
+};
