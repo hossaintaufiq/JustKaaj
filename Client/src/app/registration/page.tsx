@@ -19,6 +19,7 @@ export default function Registration() {
   } = useForm<RegisterUser>();
 
   const onSubmit = async (data: RegisterUser) => {
+    console.log(data);
     try {
       const response = await Register(data);
       console.log(response);
