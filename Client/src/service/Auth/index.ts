@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { IUser, RegisterUser, TLoginUser } from "@/types";
