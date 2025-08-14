@@ -1,9 +1,11 @@
 "use client";
+import { useUser } from "@/context/UserContext";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 export default function Navbar() {
+  const { user } = useUser();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
@@ -117,69 +119,96 @@ export default function Navbar() {
 
         {/* Desktop Right Side - Auth and Profile */}
         <div className="hidden md:flex items-center space-x-3">
-          <Link
-            href="/login"
-            className="text-gray-700 hover:text-green-500 text-sm font-medium transition-colors"
-          >
-            Login
-          </Link>
-          <Link
-            href="/registration"
-            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
-          >
-            Sign Up
-          </Link>
-
-          {/* Profile Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-              className="flex items-center space-x-1 text-gray-700 hover:text-green-500 text-sm font-medium transition-colors"
-            >
-              <span>Profile</span>
-              <svg
-                className={`w-4 h-4 transition-transform ${
-                  isProfileDropdownOpen ? "rotate-180" : ""
-                }`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+          {!user?.email ? (
+            // Not Logged In: Show Login & Sign Up
+            <>
+              <Link
+                href="/login"
+                className="text-gray-700 hover:text-green-500 text-sm font-medium transition-colors"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </button>
+                Login
+              </Link>
+              <Link
+                href="/registration"
+                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+              >
+                Sign Up
+              </Link>
+            </>
+          ) : (
+            // Logged In: Show Profile Dropdown
+            <div className="relative">
+              <button
+                onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                className="flex items-center space-x-1 text-gray-700 hover:text-green-500 text-sm font-medium transition-colors"
+              >
+                <span>Profile</span>
+                <svg
+                  className={`w-4 h-4 transition-transform ${
+                    isProfileDropdownOpen ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
 
-            {isProfileDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 sm:w-56 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
-                <Link
-                  href="/profile/user"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
-                  onClick={() => setIsProfileDropdownOpen(false)}
-                >
-                  User Profile
-                </Link>
-                <Link
-                  href="/profile/provider"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
-                  onClick={() => setIsProfileDropdownOpen(false)}
-                >
-                  Service Provider Profile
-                </Link>
-                <Link
-                  href="/admin/dashboard"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
-                  onClick={() => setIsProfileDropdownOpen(false)}
-                >
-                  Admin Dashboard
-                </Link>
-              </div>
-            )}
-          </div>
+              {isProfileDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 sm:w-56 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+                  <Link
+                    href="/profile/user"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                    onClick={() => setIsProfileDropdownOpen(false)}
+                  >
+                    Profile
+                  </Link>
+                  <Link
+                    href="/profile/user"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                    onClick={() => setIsProfileDropdownOpen(false)}
+                  >
+                    Logout
+                  </Link>
+
+                  {user?.role === "SERVICE_PROVIDER" && (
+                    <div>
+                      <Link
+                        href="/profile/provider"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                        onClick={() => setIsProfileDropdownOpen(false)}
+                      >
+                        My Services
+                      </Link>
+                      <Link
+                        href="/service-create"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                        onClick={() => setIsProfileDropdownOpen(false)}
+                      >
+                        Create Service
+                      </Link>
+                    </div>
+                  )}
+
+                  {user?.role === "ADMIN" && (
+                    <Link
+                      href="/admin/dashboard"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                      onClick={() => setIsProfileDropdownOpen(false)}
+                    >
+                      Admin Dashboard
+                    </Link>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
