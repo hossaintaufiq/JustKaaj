@@ -7,6 +7,8 @@ import Navbar from "@/Component/Shared/Navbar";
 import Footer from "@/Component/Shared/Footer";
 import { Register } from "@/service/Auth";
 import { RegisterUser } from "@/types";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function Registration() {
   const [activeTab, setActiveTab] = useState<"user" | "provider">("user");
@@ -17,18 +19,18 @@ export default function Registration() {
     reset,
     formState: { errors },
   } = useForm<RegisterUser>();
+  const router = useRouter();
 
   const onSubmit = async (data: RegisterUser) => {
+    console.log(data);
     try {
-      const response = await Register(data);
-      console.log(response);
-
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+      const res = await Register(data);
+      if (res?.success) {
+        toast.success(res?.message);
+        router.push("/");
+      } else {
+        toast.error(res?.message);
       }
-
-      const result = await response.json();
-      console.log("API response:", result);
       reset();
     } catch (error) {
       console.error("Error submitting form:", error);

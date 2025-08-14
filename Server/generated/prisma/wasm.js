@@ -126,8 +126,6 @@ exports.Prisma.AddressScalarFieldEnum = {
   city: 'city',
   state: 'state',
   postal_code: 'postal_code',
-  latitude: 'latitude',
-  longitude: 'longitude',
   user_id: 'user_id'
 };
 

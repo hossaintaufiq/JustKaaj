@@ -14,8 +14,6 @@ model Address {
   city           String
   state          String
   postal_code    Int
-  latitude       Float
-  longitude      Float
 
   //relation
   user    User   @relation(fields: [user_id], references: [user_id])
