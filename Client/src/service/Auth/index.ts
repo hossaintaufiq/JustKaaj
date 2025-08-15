@@ -100,6 +100,7 @@
 
 
 // new code 
+// solving the address and others 
 "use client"; // Now runs in browser for token storage
 
 import { IUser, RegisterUser, TLoginUser } from "@/types";
@@ -123,7 +124,7 @@ const removeToken = () => {
 // ---------------- REGISTER ----------------
 export const Register = async (userdata: RegisterUser) => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/user/create-user`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/user/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userdata),
