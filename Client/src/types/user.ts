@@ -13,6 +13,8 @@ export type RegisterUser = {
   password: string;
   company?: string;
   phone: string;
+  // company?: string;
+  agree: boolean;
   address: {
     street_address: string;
     city: string;

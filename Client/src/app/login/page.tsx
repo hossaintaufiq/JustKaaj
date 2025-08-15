@@ -119,10 +119,10 @@ export default function Login() {
             >
               Privacy Policy & Terms of Use
             </Link>{" "}
-            and{" "}
+            {/* and{" "}
             <Link href="/terms" className="text-green-500 hover:underline">
               Terms & Conditions
-            </Link>
+            </Link> */}
           </p>
         </div>
       </section>

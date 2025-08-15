@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 
 export const Register = async (userdata: RegisterUser) => {
   try {
-    const res = await fetch("http://localhost:5000/api/user/create-user", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/user/create-user`, { 
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -27,7 +27,9 @@ export const Register = async (userdata: RegisterUser) => {
 
 export const LoginUser = async (userdata: TLoginUser) => {
   try {
-    const res = await fetch("http://localhost:5000/api/auth/login", {
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/login`, {
+
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -74,7 +76,7 @@ export const myProfile = async () => {
   }
 
   try {
-    const res = await fetch("api/auth/my-profile", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/my-profile`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -89,3 +91,8 @@ export const myProfile = async () => {
     throw new Error("Failed to fetch profile");
   }
 };
+
+
+// const res = await fetch("http://localhost:5000/api/user/create-user", { ... });
+// const res = await fetch("http://147.79.68.37:5000/api/auth/login", { ... });
+// const res = await fetch("api/auth/my-profile", { ... });
