@@ -1,15 +1,24 @@
 "use client";
 import { useUser } from "@/context/UserContext";
+import { logout } from "@/service/Auth";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Navbar() {
-  const { user } = useUser();
+  const { user, setIsLoading } = useUser();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isLegalDropdownOpen, setIsLegalDropdownOpen] = useState(false);
+  const router = useRouter();
+
+  const handleLogOut = () => {
+    logout();
+    setIsLoading(true);
+    setIsProfileDropdownOpen(false);
+    router.push("/");
+  };
 
   return (
     <div className="relative">
@@ -172,7 +181,7 @@ export default function Navbar() {
                   <Link
                     href="/profile/user"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
-                    onClick={() => setIsProfileDropdownOpen(false)}
+                    onClick={handleLogOut}
                   >
                     Logout
                   </Link>
@@ -316,48 +325,70 @@ export default function Navbar() {
 
             {/* Mobile Auth and Profile Buttons */}
             <div className="pt-4 border-t border-gray-200 space-y-3">
-              <Link
-                href="/login"
-                className="block text-lg font-medium py-2 text-gray-700 hover:text-green-500"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Login
-              </Link>
-              <Link
-                href="/registration"
-                className="block text-lg font-medium py-2 text-gray-700 hover:text-green-500"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Sign Up
-              </Link>
+              {!user?.email ? (
+                <div>
+                  <Link
+                    href="/login"
+                    className="block text-lg font-medium py-2 text-gray-700 hover:text-green-500"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    href="/registration"
+                    className="block text-lg font-medium py-2 text-gray-700 hover:text-green-500"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              ) : (
+                // Mobile Profile Links
+                <div className="pt-2 border-t border-gray-200">
+                  <Link
+                    href="/profile/user"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                    onClick={() => setIsProfileDropdownOpen(false)}
+                  >
+                    Profile
+                  </Link>
+                  <Link
+                    href="/profile/user"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                    onClick={handleLogOut}
+                  >
+                    Logout
+                  </Link>
+                  {user?.role === "SERVICE_PROVIDER" && (
+                    <div>
+                      <Link
+                        href="/profile/provider"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                        onClick={() => setIsProfileDropdownOpen(false)}
+                      >
+                        My Services
+                      </Link>
+                      <Link
+                        href="/service-create"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                        onClick={() => setIsProfileDropdownOpen(false)}
+                      >
+                        Create Service
+                      </Link>
+                    </div>
+                  )}
 
-              {/* Mobile Profile Links */}
-              <div className="pt-2 border-t border-gray-200">
-                <p className="text-sm font-medium text-gray-500 mb-2">
-                  Profiles
-                </p>
-                <Link
-                  href="/profile/user"
-                  className="block text-lg font-medium py-2 text-gray-700 hover:text-green-500"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  User Profile
-                </Link>
-                <Link
-                  href="/profile/provider"
-                  className="block text-lg font-medium py-2 text-gray-700 hover:text-green-500"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Service Provider Profile
-                </Link>
-                <Link
-                  href="/admin/dashboard"
-                  className="block text-lg font-medium py-2 text-gray-700 hover:text-green-500"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Admin Dashboard
-                </Link>
-              </div>
+                  {user?.role === "ADMIN" && (
+                    <Link
+                      href="/admin/dashboard"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                      onClick={() => setIsProfileDropdownOpen(false)}
+                    >
+                      Admin Dashboard
+                    </Link>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>

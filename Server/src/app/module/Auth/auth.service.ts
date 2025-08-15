@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import { PrismaClient, User, USER_STATUS } from '../../../../generated/prisma';
+import config from '../../config';
 
 const prisma = new PrismaClient();
 
@@ -20,14 +21,14 @@ const userLogin = async (payload: User) => {
   }
   const accessToken = await jwt.sign(
     { id: userData.user_id, email: userData.email, role: userData.role },
-    process.env.JWT_ACCESS_SECRET as string,
+    config.jwt_access_token_secret as string,
     {
       expiresIn: '15m',
     }
   );
   const refreshToken = jwt.sign(
     { id: userData.user_id, email: userData.email, role: userData.role },
-    process.env.JWT_REFRESH_SECRET as string,
+    config.jwt_refresh_token_secret as string,
     {
       expiresIn: '30d',
     }
@@ -43,7 +44,7 @@ const refreshToken = async (token: string) => {
   try {
     decoded = jwt.verify(
       token,
-      process.env.JWT_REFRESH_SECRET as Secret
+      config.jwt_refresh_token_secret as Secret
     ) as JwtPayload;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
@@ -61,7 +62,7 @@ const refreshToken = async (token: string) => {
       email: (await userData).email,
       role: (await userData).role,
     },
-    process.env.JWT_ACCESS_SECRET as Secret,
+    config.jwt_access_token_secret as Secret,
     {
       expiresIn: '15m',
     }

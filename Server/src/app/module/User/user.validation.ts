@@ -5,8 +5,6 @@ const addressSchema = z.object({
   city: z.string(),
   state: z.string(),
   postal_code: z.number(),
-  latitude: z.number().min(-90).max(90),
-  longitude: z.number().min(-180).max(180),
 });
 
 const createAdminSchemaValidation = z.object({
@@ -14,8 +12,7 @@ const createAdminSchemaValidation = z.object({
     email: z.string().email(),
     password: z.string().min(6),
     fullName: z.string(),
-    phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number'),
-    role: z.literal('ADMIN'),
+    phone: z.string(),
     address: addressSchema,
   }),
 });
@@ -25,7 +22,7 @@ const createUserSchemaValidation = z.object({
     email: z.string().email(),
     password: z.string().min(6),
     fullName: z.string(),
-    phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number'),
+    phone: z.string(),
     address: addressSchema,
   }),
 });
@@ -34,8 +31,7 @@ const createServiceProviderSchema = z.object({
     email: z.string().email(),
     password: z.string().min(6),
     fullName: z.string(),
-    phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number'),
-    role: z.literal('SERVICE_PROVIDER'),
+    phone: z.string(),
     address: addressSchema,
     business_name: z.string(),
     business_license: z.number(),

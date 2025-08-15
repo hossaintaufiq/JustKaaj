@@ -5,10 +5,8 @@ const zod_1 = require("zod");
 const addressSchema = zod_1.z.object({
     street_address: zod_1.z.string(),
     city: zod_1.z.string(),
-    state: zod_1.z.string().length(2), // Assuming US state code
+    state: zod_1.z.string(),
     postal_code: zod_1.z.number(),
-    latitude: zod_1.z.number().min(-90).max(90),
-    longitude: zod_1.z.number().min(-180).max(180),
 });
 const createAdminSchemaValidation = zod_1.z.object({
     body: zod_1.z.object({
