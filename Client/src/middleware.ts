@@ -2,9 +2,11 @@ import { getCurrentUser } from "@/service/Auth";
 import { NextRequest, NextResponse } from "next/server";
 type Role = keyof typeof roleBasedPrivateRoutes;
 
-const authRoutes = ["/login", "register"];
+const authRoutes = ["/login", "/register"];
 const roleBasedPrivateRoutes = {
-  admin: [/^\/admin/],
+  ADMIN: [/^\/admin/, /^\/profile/],
+  USER: [/^\/user/, /^\/profile/],
+  SERVICE_PROVIDER: [],
 };
 
 export const middleware = async (req: NextRequest) => {
@@ -29,6 +31,13 @@ export const middleware = async (req: NextRequest) => {
   return NextResponse.redirect(new URL("/", req.url));
 };
 
-// export const config={
-//     matcher:["/", "/login", "/register", "/dashboard/:path*"]
-// }
+export const config = {
+  matcher: [
+    "/admin",
+    "/admin/:path*",
+    "/user",
+    "/user/:path*",
+    "/profile/:path*",
+    "/dashboard/:path*",
+  ],
+};

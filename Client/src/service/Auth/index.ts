@@ -56,11 +56,11 @@ export const logout = async () => {
 
 export const getCurrentUser = async (): Promise<IUser | null> => {
   const accessToken = (await cookies()).get("accessToken")?.value;
+  let decodedData = null;
 
-  let decoded;
   if (accessToken) {
-    decoded = jwtDecode<IUser>(accessToken);
-    return decoded;
+    decodedData = await jwtDecode(accessToken);
+    return decodedData;
   } else {
     return null;
   }
@@ -74,7 +74,7 @@ export const myProfile = async () => {
   }
 
   try {
-    const res = await fetch("api/auth/my-profile", {
+    const res = await fetch("http://localhost:5000/api/user/getMe", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

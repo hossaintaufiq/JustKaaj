@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
+import config from '../config';
 
 const auth = (...roles: string[]) => {
   return async (
@@ -10,19 +11,20 @@ const auth = (...roles: string[]) => {
   ) => {
     try {
       const token = req.headers.authorization;
+      console.log(token);
 
       if (!token) {
         throw new Error('You are not authorized!');
       }
       const verifiedUser = jwt.verify(
         token,
-        process.env.JWT_REFRESH_SECRET as Secret
+        config.jwt_access_token_secret as Secret
       ) as JwtPayload;
 
       req.user = verifiedUser;
 
       if (roles.length && !roles.includes(verifiedUser.role)) {
-        throw new Error('Forbidden!');
+        throw new Error('You are not authorized!');
       }
       next();
     } catch (err) {

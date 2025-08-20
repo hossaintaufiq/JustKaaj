@@ -23,21 +23,14 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleUser = async () => {
-    try {
-      const currentUser = await getCurrentUser();
-      setUser(currentUser);
-    } catch (error) {
-      console.error("Failed to fetch user:", error);
-      setUser(null);
-    } finally {
-      setIsLoading(false);
-    }
+    const user = await getCurrentUser();
+    setUser(user);
+    setIsLoading(false);
   };
 
-  // Run once on mount
   useEffect(() => {
     handleUser();
-  }, []);
+  }, [isLoading]);
 
   return (
     <UserContext.Provider value={{ user, setUser, isLoading, setIsLoading }}>
@@ -46,11 +39,10 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-// Custom hook
 export const useUser = () => {
   const context = useContext(UserContext);
 
-  if (!context) {
+  if (context == undefined) {
     throw new Error("useUser must be used within the UserProvider context");
   }
 

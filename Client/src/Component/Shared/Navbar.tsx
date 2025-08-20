@@ -1,6 +1,7 @@
 "use client";
+import { protectedRoutes } from "@/constants";
 import { useUser } from "@/context/UserContext";
-import { logout } from "@/service/Auth";
+import { getCurrentUser, logout } from "@/service/Auth";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -16,8 +17,10 @@ export default function Navbar() {
   const handleLogOut = () => {
     logout();
     setIsLoading(true);
-    setIsProfileDropdownOpen(false);
-    router.push("/");
+    getCurrentUser();
+    if (protectedRoutes.some((route) => pathname.match(route))) {
+      router.push("/");
+    }
   };
 
   return (
@@ -149,42 +152,29 @@ export default function Navbar() {
             <div className="relative">
               <button
                 onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                className="flex items-center space-x-1 text-gray-700 hover:text-green-500 text-sm font-medium transition-colors"
+                className="flex items-center justify-center w-9 h-9 rounded-full border-2 border-green-600
+             bg-gray-100 text-gray-700 hover:bg-green-100 hover:text-green-600 
+             focus:outline-none focus:ring-2 focus:ring-green-400 
+             transition-all duration-200"
               >
-                <span>Profile</span>
-                <svg
-                  className={`w-4 h-4 transition-transform ${
-                    isProfileDropdownOpen ? "rotate-180" : ""
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
+                <span className="text-lg">👤</span>
               </button>
 
               {isProfileDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 sm:w-56 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
                   <Link
-                    href="/profile/user"
+                    href={`/profile/${user.role.toLowerCase()}`}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
                     onClick={() => setIsProfileDropdownOpen(false)}
                   >
                     Profile
                   </Link>
-                  <Link
-                    href="/profile/user"
+                  <button
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
                     onClick={handleLogOut}
                   >
                     Logout
-                  </Link>
+                  </button>
 
                   {user?.role === "SERVICE_PROVIDER" && (
                     <div>
@@ -346,19 +336,45 @@ export default function Navbar() {
                 // Mobile Profile Links
                 <div className="pt-2 border-t border-gray-200">
                   <Link
-                    href="/profile/user"
+                    href={`/profile/${user?.role.toLowerCase()}`}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
                     onClick={() => setIsProfileDropdownOpen(false)}
                   >
                     Profile
                   </Link>
-                  <Link
-                    href="/profile/user"
+                  {user?.role === "SERVICE_PROVIDER" && (
+                    <div>
+                      <Link
+                        href="/profile/provider"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                        onClick={() => setIsProfileDropdownOpen(false)}
+                      >
+                        My Services
+                      </Link>
+                      <Link
+                        href="/service-create"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                        onClick={() => setIsProfileDropdownOpen(false)}
+                      >
+                        Create Service
+                      </Link>
+                    </div>
+                  )}
+                  {user?.role === "ADMIN" && (
+                    <Link
+                      href="/admin/dashboard"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                      onClick={() => setIsProfileDropdownOpen(false)}
+                    >
+                      Admin Dashboard
+                    </Link>
+                  )}
+                  <button
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
                     onClick={handleLogOut}
                   >
                     Logout
-                  </Link>
+                  </button>
                   {user?.role === "SERVICE_PROVIDER" && (
                     <div>
                       <Link

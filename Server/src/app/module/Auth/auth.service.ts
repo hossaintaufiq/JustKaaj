@@ -23,7 +23,7 @@ const userLogin = async (payload: User) => {
     { id: userData.user_id, email: userData.email, role: userData.role },
     config.jwt_access_token_secret as string,
     {
-      expiresIn: '15m',
+      expiresIn: '15d',
     }
   );
   const refreshToken = jwt.sign(
@@ -64,7 +64,7 @@ const refreshToken = async (token: string) => {
     },
     config.jwt_access_token_secret as Secret,
     {
-      expiresIn: '15m',
+      expiresIn: '15d',
     }
   );
   return {
