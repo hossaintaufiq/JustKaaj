@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 
 export const Register = async (userdata: RegisterUser) => {
   try {
-    const res = await fetch("http://localhost:5000/api/user/create-user", {
+    const res = await fetch(`http://localhost:5000/api/user/create-user`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -27,7 +27,7 @@ export const Register = async (userdata: RegisterUser) => {
 
 export const LoginUser = async (userdata: TLoginUser) => {
   try {
-    const res = await fetch("http://localhost:5000/api/auth/login", {
+    const res = await fetch(`http://localhost:5000/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -89,3 +89,7 @@ export const myProfile = async () => {
     throw new Error("Failed to fetch profile");
   }
 };
+
+// const res = await fetch("http://localhost:5000/api/user/create-user", { ... });
+// const res = await fetch("http://147.79.68.37:5000/api/auth/login", { ... });
+// const res = await fetch("api/auth/my-profile", { ... });
