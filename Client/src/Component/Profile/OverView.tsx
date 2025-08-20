@@ -20,8 +20,6 @@ const OverView = () => {
         year: "numeric",
       })
     : null;
-
-  console.log(userData);
   return (
     <>
       <h2 className="text-xl font-semibold text-gray-900 mb-6">

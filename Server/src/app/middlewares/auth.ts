@@ -11,7 +11,6 @@ const auth = (...roles: string[]) => {
   ) => {
     try {
       const token = req.headers.authorization;
-      console.log(token);
 
       if (!token) {
         throw new Error('You are not authorized!');
