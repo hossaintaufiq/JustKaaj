@@ -1,12 +1,32 @@
 "use server";
 
-import { IUser, RegisterUser, TLoginUser } from "@/types";
+import { IUser, TRegisterUser, TLoginUser } from "@/types";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 
-export const Register = async (userdata: RegisterUser) => {
+export const RegisterUser = async (userdata: TRegisterUser) => {
   try {
     const res = await fetch(`http://localhost:5000/api/user/create-user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userdata),
+    });
+
+    const result = await res.json();
+    if (result.success) {
+      (await cookies()).set("accessToken", result.data.accessToken);
+    }
+    return result;
+  } catch (error) {
+    console.error("Error during registration:", error);
+    throw new Error("Registration failed");
+  }
+};
+export const RegisterProvider = async (userdata: TRegisterUser) => {
+  try {
+    const res = await fetch(`http://localhost:5000/api/user/create-provider`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

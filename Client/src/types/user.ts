@@ -7,21 +7,29 @@ export type IUser = {
   exp?: number;
 };
 
-export type RegisterUser = {
+export type TRegisterUser = {
   fullName: string;
   email: string;
   password: string;
-  company?: string;
   phone: string;
-  // company?: string;
   agree: boolean;
+
   address: {
+    area_name: string;
     street_address: string;
     city: string;
     state: string;
     postal_code: number;
-    latitude: number;
-    longitude: number;
+  };
+
+  provider?: {
+    business_name: string;
+    business_license: number;
+    nid_number: number;
+    govt_id_or_tin: number;
+    facebook_profile?: string;
+    website_link?: string;
+    category: string;
   };
 };
 
