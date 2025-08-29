@@ -122,6 +122,7 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.AddressScalarFieldEnum = {
   address_id: 'address_id',
+  area_name: 'area_name',
   street_address: 'street_address',
   city: 'city',
   state: 'state',
@@ -134,7 +135,9 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   fullName: 'fullName',
+  profileImage: 'profileImage',
   phone: 'phone',
+  agree: 'agree',
   role: 'role',
   is_verified: 'is_verified',
   status: 'status',
@@ -161,8 +164,6 @@ exports.Prisma.Service_ProviderScalarFieldEnum = {
   govt_id_or_tin: 'govt_id_or_tin',
   facebook_profile: 'facebook_profile',
   website_link: 'website_link',
-  area_name: 'area_name',
-  postal_code: 'postal_code',
   category: 'category',
   status: 'status',
   is_apporved: 'is_apporved',

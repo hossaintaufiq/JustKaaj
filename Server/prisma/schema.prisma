@@ -13,6 +13,7 @@ datasource db {
 
 model Address {
 address_id String @id @default(ulid())
+area_name String
 street_address String
 city String
 state String
@@ -29,8 +30,10 @@ user_id String @id @default(ulid())
 email String @unique
 password String
 fullName String
+profileImage String?
 address   Address?
 phone String
+agree Boolean @default(false)
 role UserRole @default(USER)
 is_verified Boolean @default(false)
 status USER_STATUS @default(ACTIVE)
@@ -65,8 +68,6 @@ model Service_Provider{
   govt_id_or_tin Int
   facebook_profile String
   website_link String
-  area_name String
-  postal_code Int
   category String
   status Provider_Status @default(PENDING)
   is_apporved Boolean @default(false)

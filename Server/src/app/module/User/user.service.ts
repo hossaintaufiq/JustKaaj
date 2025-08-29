@@ -72,24 +72,44 @@ const createServicePorvider = async (req: Request) => {
   const keyToRemove = ['password', 'role', 'phone'];
   keyToRemove.forEach((key) => delete providerData[key]);
   const result = await prisma.$transaction(async (trns) => {
-    const createUser = await trns.user.create({
-      data: userData,
+    // Check if user already exists
+    const existingUser = await trns.user.findUnique({
+      where: { email: userData.email },
     });
-    const setAddress = await trns.address.create({
+
+    let createUser = null;
+    let setAddress = null;
+
+    if (!existingUser) {
+      // Create new user
+      createUser = await trns.user.create({
+        data: userData,
+      });
+
+      // Create address
+      setAddress = await trns.address.create({
+        data: {
+          ...address,
+          user_id: createUser.user_id,
+        },
+      });
+    }
+
+    // Always create provider (link to existing or new user)
+    const createProvider = await trns.service_Provider.create({
       data: {
-        ...address,
-        user_id: createUser.user_id,
+        ...providerData,
+        user_id: existingUser ? existingUser.user_id : createUser?.user_id,
       },
     });
-    const createProvider = await trns.service_Provider.create({
-      data: providerData,
-    });
+
     return {
-      createUser,
-      setAddress,
-      createProvider,
+      user: existingUser ?? createUser,
+      address: setAddress,
+      provider: createProvider,
     };
   });
+
   return result;
 };
 

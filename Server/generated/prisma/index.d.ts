@@ -1673,6 +1673,7 @@ export namespace Prisma {
 
   export type AddressMinAggregateOutputType = {
     address_id: string | null
+    area_name: string | null
     street_address: string | null
     city: string | null
     state: string | null
@@ -1682,6 +1683,7 @@ export namespace Prisma {
 
   export type AddressMaxAggregateOutputType = {
     address_id: string | null
+    area_name: string | null
     street_address: string | null
     city: string | null
     state: string | null
@@ -1691,6 +1693,7 @@ export namespace Prisma {
 
   export type AddressCountAggregateOutputType = {
     address_id: number
+    area_name: number
     street_address: number
     city: number
     state: number
@@ -1710,6 +1713,7 @@ export namespace Prisma {
 
   export type AddressMinAggregateInputType = {
     address_id?: true
+    area_name?: true
     street_address?: true
     city?: true
     state?: true
@@ -1719,6 +1723,7 @@ export namespace Prisma {
 
   export type AddressMaxAggregateInputType = {
     address_id?: true
+    area_name?: true
     street_address?: true
     city?: true
     state?: true
@@ -1728,6 +1733,7 @@ export namespace Prisma {
 
   export type AddressCountAggregateInputType = {
     address_id?: true
+    area_name?: true
     street_address?: true
     city?: true
     state?: true
@@ -1824,6 +1830,7 @@ export namespace Prisma {
 
   export type AddressGroupByOutputType = {
     address_id: string
+    area_name: string
     street_address: string
     city: string
     state: string
@@ -1852,6 +1859,7 @@ export namespace Prisma {
 
   export type AddressSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     address_id?: boolean
+    area_name?: boolean
     street_address?: boolean
     city?: boolean
     state?: boolean
@@ -1862,6 +1870,7 @@ export namespace Prisma {
 
   export type AddressSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     address_id?: boolean
+    area_name?: boolean
     street_address?: boolean
     city?: boolean
     state?: boolean
@@ -1872,6 +1881,7 @@ export namespace Prisma {
 
   export type AddressSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     address_id?: boolean
+    area_name?: boolean
     street_address?: boolean
     city?: boolean
     state?: boolean
@@ -1882,6 +1892,7 @@ export namespace Prisma {
 
   export type AddressSelectScalar = {
     address_id?: boolean
+    area_name?: boolean
     street_address?: boolean
     city?: boolean
     state?: boolean
@@ -1889,7 +1900,7 @@ export namespace Prisma {
     user_id?: boolean
   }
 
-  export type AddressOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"address_id" | "street_address" | "city" | "state" | "postal_code" | "user_id", ExtArgs["result"]["address"]>
+  export type AddressOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"address_id" | "area_name" | "street_address" | "city" | "state" | "postal_code" | "user_id", ExtArgs["result"]["address"]>
   export type AddressInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -1907,6 +1918,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       address_id: string
+      area_name: string
       street_address: string
       city: string
       state: string
@@ -2337,6 +2349,7 @@ export namespace Prisma {
    */
   interface AddressFieldRefs {
     readonly address_id: FieldRef<"Address", 'String'>
+    readonly area_name: FieldRef<"Address", 'String'>
     readonly street_address: FieldRef<"Address", 'String'>
     readonly city: FieldRef<"Address", 'String'>
     readonly state: FieldRef<"Address", 'String'>
@@ -2771,7 +2784,9 @@ export namespace Prisma {
     email: string | null
     password: string | null
     fullName: string | null
+    profileImage: string | null
     phone: string | null
+    agree: boolean | null
     role: $Enums.UserRole | null
     is_verified: boolean | null
     status: $Enums.USER_STATUS | null
@@ -2784,7 +2799,9 @@ export namespace Prisma {
     email: string | null
     password: string | null
     fullName: string | null
+    profileImage: string | null
     phone: string | null
+    agree: boolean | null
     role: $Enums.UserRole | null
     is_verified: boolean | null
     status: $Enums.USER_STATUS | null
@@ -2797,7 +2814,9 @@ export namespace Prisma {
     email: number
     password: number
     fullName: number
+    profileImage: number
     phone: number
+    agree: number
     role: number
     is_verified: number
     status: number
@@ -2812,7 +2831,9 @@ export namespace Prisma {
     email?: true
     password?: true
     fullName?: true
+    profileImage?: true
     phone?: true
+    agree?: true
     role?: true
     is_verified?: true
     status?: true
@@ -2825,7 +2846,9 @@ export namespace Prisma {
     email?: true
     password?: true
     fullName?: true
+    profileImage?: true
     phone?: true
+    agree?: true
     role?: true
     is_verified?: true
     status?: true
@@ -2838,7 +2861,9 @@ export namespace Prisma {
     email?: true
     password?: true
     fullName?: true
+    profileImage?: true
     phone?: true
+    agree?: true
     role?: true
     is_verified?: true
     status?: true
@@ -2924,7 +2949,9 @@ export namespace Prisma {
     email: string
     password: string
     fullName: string
+    profileImage: string | null
     phone: string
+    agree: boolean
     role: $Enums.UserRole
     is_verified: boolean
     status: $Enums.USER_STATUS
@@ -2954,7 +2981,9 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     fullName?: boolean
+    profileImage?: boolean
     phone?: boolean
+    agree?: boolean
     role?: boolean
     is_verified?: boolean
     status?: boolean
@@ -2970,7 +2999,9 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     fullName?: boolean
+    profileImage?: boolean
     phone?: boolean
+    agree?: boolean
     role?: boolean
     is_verified?: boolean
     status?: boolean
@@ -2983,7 +3014,9 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     fullName?: boolean
+    profileImage?: boolean
     phone?: boolean
+    agree?: boolean
     role?: boolean
     is_verified?: boolean
     status?: boolean
@@ -2996,7 +3029,9 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     fullName?: boolean
+    profileImage?: boolean
     phone?: boolean
+    agree?: boolean
     role?: boolean
     is_verified?: boolean
     status?: boolean
@@ -3004,7 +3039,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"user_id" | "email" | "password" | "fullName" | "phone" | "role" | "is_verified" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"user_id" | "email" | "password" | "fullName" | "profileImage" | "phone" | "agree" | "role" | "is_verified" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     address?: boolean | User$addressArgs<ExtArgs>
     service_provider?: boolean | User$service_providerArgs<ExtArgs>
@@ -3025,7 +3060,9 @@ export namespace Prisma {
       email: string
       password: string
       fullName: string
+      profileImage: string | null
       phone: string
+      agree: boolean
       role: $Enums.UserRole
       is_verified: boolean
       status: $Enums.USER_STATUS
@@ -3461,7 +3498,9 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
     readonly fullName: FieldRef<"User", 'String'>
+    readonly profileImage: FieldRef<"User", 'String'>
     readonly phone: FieldRef<"User", 'String'>
+    readonly agree: FieldRef<"User", 'Boolean'>
     readonly role: FieldRef<"User", 'UserRole'>
     readonly is_verified: FieldRef<"User", 'Boolean'>
     readonly status: FieldRef<"User", 'USER_STATUS'>
@@ -5017,14 +5056,12 @@ export namespace Prisma {
     business_license: number | null
     nid_number: number | null
     govt_id_or_tin: number | null
-    postal_code: number | null
   }
 
   export type Service_ProviderSumAggregateOutputType = {
     business_license: number | null
     nid_number: number | null
     govt_id_or_tin: number | null
-    postal_code: number | null
   }
 
   export type Service_ProviderMinAggregateOutputType = {
@@ -5037,8 +5074,6 @@ export namespace Prisma {
     govt_id_or_tin: number | null
     facebook_profile: string | null
     website_link: string | null
-    area_name: string | null
-    postal_code: number | null
     category: string | null
     status: $Enums.Provider_Status | null
     is_apporved: boolean | null
@@ -5055,8 +5090,6 @@ export namespace Prisma {
     govt_id_or_tin: number | null
     facebook_profile: string | null
     website_link: string | null
-    area_name: string | null
-    postal_code: number | null
     category: string | null
     status: $Enums.Provider_Status | null
     is_apporved: boolean | null
@@ -5073,8 +5106,6 @@ export namespace Prisma {
     govt_id_or_tin: number
     facebook_profile: number
     website_link: number
-    area_name: number
-    postal_code: number
     category: number
     status: number
     is_apporved: number
@@ -5087,14 +5118,12 @@ export namespace Prisma {
     business_license?: true
     nid_number?: true
     govt_id_or_tin?: true
-    postal_code?: true
   }
 
   export type Service_ProviderSumAggregateInputType = {
     business_license?: true
     nid_number?: true
     govt_id_or_tin?: true
-    postal_code?: true
   }
 
   export type Service_ProviderMinAggregateInputType = {
@@ -5107,8 +5136,6 @@ export namespace Prisma {
     govt_id_or_tin?: true
     facebook_profile?: true
     website_link?: true
-    area_name?: true
-    postal_code?: true
     category?: true
     status?: true
     is_apporved?: true
@@ -5125,8 +5152,6 @@ export namespace Prisma {
     govt_id_or_tin?: true
     facebook_profile?: true
     website_link?: true
-    area_name?: true
-    postal_code?: true
     category?: true
     status?: true
     is_apporved?: true
@@ -5143,8 +5168,6 @@ export namespace Prisma {
     govt_id_or_tin?: true
     facebook_profile?: true
     website_link?: true
-    area_name?: true
-    postal_code?: true
     category?: true
     status?: true
     is_apporved?: true
@@ -5248,8 +5271,6 @@ export namespace Prisma {
     govt_id_or_tin: number
     facebook_profile: string
     website_link: string
-    area_name: string
-    postal_code: number
     category: string
     status: $Enums.Provider_Status
     is_apporved: boolean
@@ -5285,8 +5306,6 @@ export namespace Prisma {
     govt_id_or_tin?: boolean
     facebook_profile?: boolean
     website_link?: boolean
-    area_name?: boolean
-    postal_code?: boolean
     category?: boolean
     status?: boolean
     is_apporved?: boolean
@@ -5306,8 +5325,6 @@ export namespace Prisma {
     govt_id_or_tin?: boolean
     facebook_profile?: boolean
     website_link?: boolean
-    area_name?: boolean
-    postal_code?: boolean
     category?: boolean
     status?: boolean
     is_apporved?: boolean
@@ -5325,8 +5342,6 @@ export namespace Prisma {
     govt_id_or_tin?: boolean
     facebook_profile?: boolean
     website_link?: boolean
-    area_name?: boolean
-    postal_code?: boolean
     category?: boolean
     status?: boolean
     is_apporved?: boolean
@@ -5344,15 +5359,13 @@ export namespace Prisma {
     govt_id_or_tin?: boolean
     facebook_profile?: boolean
     website_link?: boolean
-    area_name?: boolean
-    postal_code?: boolean
     category?: boolean
     status?: boolean
     is_apporved?: boolean
     submitted_at?: boolean
   }
 
-  export type Service_ProviderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "fullName" | "business_name" | "business_license" | "nid_number" | "govt_id_or_tin" | "facebook_profile" | "website_link" | "area_name" | "postal_code" | "category" | "status" | "is_apporved" | "submitted_at", ExtArgs["result"]["service_Provider"]>
+  export type Service_ProviderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "fullName" | "business_name" | "business_license" | "nid_number" | "govt_id_or_tin" | "facebook_profile" | "website_link" | "category" | "status" | "is_apporved" | "submitted_at", ExtArgs["result"]["service_Provider"]>
   export type Service_ProviderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     providerServices?: boolean | Service_Provider$providerServicesArgs<ExtArgs>
@@ -5381,8 +5394,6 @@ export namespace Prisma {
       govt_id_or_tin: number
       facebook_profile: string
       website_link: string
-      area_name: string
-      postal_code: number
       category: string
       status: $Enums.Provider_Status
       is_apporved: boolean
@@ -5821,8 +5832,6 @@ export namespace Prisma {
     readonly govt_id_or_tin: FieldRef<"Service_Provider", 'Int'>
     readonly facebook_profile: FieldRef<"Service_Provider", 'String'>
     readonly website_link: FieldRef<"Service_Provider", 'String'>
-    readonly area_name: FieldRef<"Service_Provider", 'String'>
-    readonly postal_code: FieldRef<"Service_Provider", 'Int'>
     readonly category: FieldRef<"Service_Provider", 'String'>
     readonly status: FieldRef<"Service_Provider", 'Provider_Status'>
     readonly is_apporved: FieldRef<"Service_Provider", 'Boolean'>
@@ -10703,6 +10712,7 @@ export namespace Prisma {
 
   export const AddressScalarFieldEnum: {
     address_id: 'address_id',
+    area_name: 'area_name',
     street_address: 'street_address',
     city: 'city',
     state: 'state',
@@ -10718,7 +10728,9 @@ export namespace Prisma {
     email: 'email',
     password: 'password',
     fullName: 'fullName',
+    profileImage: 'profileImage',
     phone: 'phone',
+    agree: 'agree',
     role: 'role',
     is_verified: 'is_verified',
     status: 'status',
@@ -10751,8 +10763,6 @@ export namespace Prisma {
     govt_id_or_tin: 'govt_id_or_tin',
     facebook_profile: 'facebook_profile',
     website_link: 'website_link',
-    area_name: 'area_name',
-    postal_code: 'postal_code',
     category: 'category',
     status: 'status',
     is_apporved: 'is_apporved',
@@ -10869,6 +10879,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'UserRole'
    */
   export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole'>
@@ -10879,13 +10896,6 @@ export namespace Prisma {
    * Reference to a field of type 'UserRole[]'
    */
   export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -10953,6 +10963,7 @@ export namespace Prisma {
     OR?: AddressWhereInput[]
     NOT?: AddressWhereInput | AddressWhereInput[]
     address_id?: StringFilter<"Address"> | string
+    area_name?: StringFilter<"Address"> | string
     street_address?: StringFilter<"Address"> | string
     city?: StringFilter<"Address"> | string
     state?: StringFilter<"Address"> | string
@@ -10963,6 +10974,7 @@ export namespace Prisma {
 
   export type AddressOrderByWithRelationInput = {
     address_id?: SortOrder
+    area_name?: SortOrder
     street_address?: SortOrder
     city?: SortOrder
     state?: SortOrder
@@ -10977,6 +10989,7 @@ export namespace Prisma {
     AND?: AddressWhereInput | AddressWhereInput[]
     OR?: AddressWhereInput[]
     NOT?: AddressWhereInput | AddressWhereInput[]
+    area_name?: StringFilter<"Address"> | string
     street_address?: StringFilter<"Address"> | string
     city?: StringFilter<"Address"> | string
     state?: StringFilter<"Address"> | string
@@ -10986,6 +10999,7 @@ export namespace Prisma {
 
   export type AddressOrderByWithAggregationInput = {
     address_id?: SortOrder
+    area_name?: SortOrder
     street_address?: SortOrder
     city?: SortOrder
     state?: SortOrder
@@ -11003,6 +11017,7 @@ export namespace Prisma {
     OR?: AddressScalarWhereWithAggregatesInput[]
     NOT?: AddressScalarWhereWithAggregatesInput | AddressScalarWhereWithAggregatesInput[]
     address_id?: StringWithAggregatesFilter<"Address"> | string
+    area_name?: StringWithAggregatesFilter<"Address"> | string
     street_address?: StringWithAggregatesFilter<"Address"> | string
     city?: StringWithAggregatesFilter<"Address"> | string
     state?: StringWithAggregatesFilter<"Address"> | string
@@ -11018,7 +11033,9 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     fullName?: StringFilter<"User"> | string
+    profileImage?: StringNullableFilter<"User"> | string | null
     phone?: StringFilter<"User"> | string
+    agree?: BoolFilter<"User"> | boolean
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
     is_verified?: BoolFilter<"User"> | boolean
     status?: EnumUSER_STATUSFilter<"User"> | $Enums.USER_STATUS
@@ -11034,7 +11051,9 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     fullName?: SortOrder
+    profileImage?: SortOrderInput | SortOrder
     phone?: SortOrder
+    agree?: SortOrder
     role?: SortOrder
     is_verified?: SortOrder
     status?: SortOrder
@@ -11053,7 +11072,9 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     password?: StringFilter<"User"> | string
     fullName?: StringFilter<"User"> | string
+    profileImage?: StringNullableFilter<"User"> | string | null
     phone?: StringFilter<"User"> | string
+    agree?: BoolFilter<"User"> | boolean
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
     is_verified?: BoolFilter<"User"> | boolean
     status?: EnumUSER_STATUSFilter<"User"> | $Enums.USER_STATUS
@@ -11069,7 +11090,9 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     fullName?: SortOrder
+    profileImage?: SortOrderInput | SortOrder
     phone?: SortOrder
+    agree?: SortOrder
     role?: SortOrder
     is_verified?: SortOrder
     status?: SortOrder
@@ -11088,7 +11111,9 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
     fullName?: StringWithAggregatesFilter<"User"> | string
+    profileImage?: StringNullableWithAggregatesFilter<"User"> | string | null
     phone?: StringWithAggregatesFilter<"User"> | string
+    agree?: BoolWithAggregatesFilter<"User"> | boolean
     role?: EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
     is_verified?: BoolWithAggregatesFilter<"User"> | boolean
     status?: EnumUSER_STATUSWithAggregatesFilter<"User"> | $Enums.USER_STATUS
@@ -11169,8 +11194,6 @@ export namespace Prisma {
     govt_id_or_tin?: IntFilter<"Service_Provider"> | number
     facebook_profile?: StringFilter<"Service_Provider"> | string
     website_link?: StringFilter<"Service_Provider"> | string
-    area_name?: StringFilter<"Service_Provider"> | string
-    postal_code?: IntFilter<"Service_Provider"> | number
     category?: StringFilter<"Service_Provider"> | string
     status?: EnumProvider_StatusFilter<"Service_Provider"> | $Enums.Provider_Status
     is_apporved?: BoolFilter<"Service_Provider"> | boolean
@@ -11189,8 +11212,6 @@ export namespace Prisma {
     govt_id_or_tin?: SortOrder
     facebook_profile?: SortOrder
     website_link?: SortOrder
-    area_name?: SortOrder
-    postal_code?: SortOrder
     category?: SortOrder
     status?: SortOrder
     is_apporved?: SortOrder
@@ -11212,8 +11233,6 @@ export namespace Prisma {
     govt_id_or_tin?: IntFilter<"Service_Provider"> | number
     facebook_profile?: StringFilter<"Service_Provider"> | string
     website_link?: StringFilter<"Service_Provider"> | string
-    area_name?: StringFilter<"Service_Provider"> | string
-    postal_code?: IntFilter<"Service_Provider"> | number
     category?: StringFilter<"Service_Provider"> | string
     status?: EnumProvider_StatusFilter<"Service_Provider"> | $Enums.Provider_Status
     is_apporved?: BoolFilter<"Service_Provider"> | boolean
@@ -11232,8 +11251,6 @@ export namespace Prisma {
     govt_id_or_tin?: SortOrder
     facebook_profile?: SortOrder
     website_link?: SortOrder
-    area_name?: SortOrder
-    postal_code?: SortOrder
     category?: SortOrder
     status?: SortOrder
     is_apporved?: SortOrder
@@ -11258,8 +11275,6 @@ export namespace Prisma {
     govt_id_or_tin?: IntWithAggregatesFilter<"Service_Provider"> | number
     facebook_profile?: StringWithAggregatesFilter<"Service_Provider"> | string
     website_link?: StringWithAggregatesFilter<"Service_Provider"> | string
-    area_name?: StringWithAggregatesFilter<"Service_Provider"> | string
-    postal_code?: IntWithAggregatesFilter<"Service_Provider"> | number
     category?: StringWithAggregatesFilter<"Service_Provider"> | string
     status?: EnumProvider_StatusWithAggregatesFilter<"Service_Provider"> | $Enums.Provider_Status
     is_apporved?: BoolWithAggregatesFilter<"Service_Provider"> | boolean
@@ -11525,6 +11540,7 @@ export namespace Prisma {
 
   export type AddressCreateInput = {
     address_id?: string
+    area_name: string
     street_address: string
     city: string
     state: string
@@ -11534,6 +11550,7 @@ export namespace Prisma {
 
   export type AddressUncheckedCreateInput = {
     address_id?: string
+    area_name: string
     street_address: string
     city: string
     state: string
@@ -11543,6 +11560,7 @@ export namespace Prisma {
 
   export type AddressUpdateInput = {
     address_id?: StringFieldUpdateOperationsInput | string
+    area_name?: StringFieldUpdateOperationsInput | string
     street_address?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     state?: StringFieldUpdateOperationsInput | string
@@ -11552,6 +11570,7 @@ export namespace Prisma {
 
   export type AddressUncheckedUpdateInput = {
     address_id?: StringFieldUpdateOperationsInput | string
+    area_name?: StringFieldUpdateOperationsInput | string
     street_address?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     state?: StringFieldUpdateOperationsInput | string
@@ -11561,6 +11580,7 @@ export namespace Prisma {
 
   export type AddressCreateManyInput = {
     address_id?: string
+    area_name: string
     street_address: string
     city: string
     state: string
@@ -11570,6 +11590,7 @@ export namespace Prisma {
 
   export type AddressUpdateManyMutationInput = {
     address_id?: StringFieldUpdateOperationsInput | string
+    area_name?: StringFieldUpdateOperationsInput | string
     street_address?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     state?: StringFieldUpdateOperationsInput | string
@@ -11578,6 +11599,7 @@ export namespace Prisma {
 
   export type AddressUncheckedUpdateManyInput = {
     address_id?: StringFieldUpdateOperationsInput | string
+    area_name?: StringFieldUpdateOperationsInput | string
     street_address?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     state?: StringFieldUpdateOperationsInput | string
@@ -11590,7 +11612,9 @@ export namespace Prisma {
     email: string
     password: string
     fullName: string
+    profileImage?: string | null
     phone: string
+    agree?: boolean
     role?: $Enums.UserRole
     is_verified?: boolean
     status?: $Enums.USER_STATUS
@@ -11606,7 +11630,9 @@ export namespace Prisma {
     email: string
     password: string
     fullName: string
+    profileImage?: string | null
     phone: string
+    agree?: boolean
     role?: $Enums.UserRole
     is_verified?: boolean
     status?: $Enums.USER_STATUS
@@ -11622,7 +11648,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    agree?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumUSER_STATUSFieldUpdateOperationsInput | $Enums.USER_STATUS
@@ -11638,7 +11666,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    agree?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumUSER_STATUSFieldUpdateOperationsInput | $Enums.USER_STATUS
@@ -11654,7 +11684,9 @@ export namespace Prisma {
     email: string
     password: string
     fullName: string
+    profileImage?: string | null
     phone: string
+    agree?: boolean
     role?: $Enums.UserRole
     is_verified?: boolean
     status?: $Enums.USER_STATUS
@@ -11667,7 +11699,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    agree?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumUSER_STATUSFieldUpdateOperationsInput | $Enums.USER_STATUS
@@ -11680,7 +11714,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    agree?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumUSER_STATUSFieldUpdateOperationsInput | $Enums.USER_STATUS
@@ -11759,8 +11795,6 @@ export namespace Prisma {
     govt_id_or_tin: number
     facebook_profile: string
     website_link: string
-    area_name: string
-    postal_code: number
     category: string
     status?: $Enums.Provider_Status
     is_apporved?: boolean
@@ -11779,8 +11813,6 @@ export namespace Prisma {
     govt_id_or_tin: number
     facebook_profile: string
     website_link: string
-    area_name: string
-    postal_code: number
     category: string
     status?: $Enums.Provider_Status
     is_apporved?: boolean
@@ -11797,8 +11829,6 @@ export namespace Prisma {
     govt_id_or_tin?: IntFieldUpdateOperationsInput | number
     facebook_profile?: StringFieldUpdateOperationsInput | string
     website_link?: StringFieldUpdateOperationsInput | string
-    area_name?: StringFieldUpdateOperationsInput | string
-    postal_code?: IntFieldUpdateOperationsInput | number
     category?: StringFieldUpdateOperationsInput | string
     status?: EnumProvider_StatusFieldUpdateOperationsInput | $Enums.Provider_Status
     is_apporved?: BoolFieldUpdateOperationsInput | boolean
@@ -11817,8 +11847,6 @@ export namespace Prisma {
     govt_id_or_tin?: IntFieldUpdateOperationsInput | number
     facebook_profile?: StringFieldUpdateOperationsInput | string
     website_link?: StringFieldUpdateOperationsInput | string
-    area_name?: StringFieldUpdateOperationsInput | string
-    postal_code?: IntFieldUpdateOperationsInput | number
     category?: StringFieldUpdateOperationsInput | string
     status?: EnumProvider_StatusFieldUpdateOperationsInput | $Enums.Provider_Status
     is_apporved?: BoolFieldUpdateOperationsInput | boolean
@@ -11836,8 +11864,6 @@ export namespace Prisma {
     govt_id_or_tin: number
     facebook_profile: string
     website_link: string
-    area_name: string
-    postal_code: number
     category: string
     status?: $Enums.Provider_Status
     is_apporved?: boolean
@@ -11853,8 +11879,6 @@ export namespace Prisma {
     govt_id_or_tin?: IntFieldUpdateOperationsInput | number
     facebook_profile?: StringFieldUpdateOperationsInput | string
     website_link?: StringFieldUpdateOperationsInput | string
-    area_name?: StringFieldUpdateOperationsInput | string
-    postal_code?: IntFieldUpdateOperationsInput | number
     category?: StringFieldUpdateOperationsInput | string
     status?: EnumProvider_StatusFieldUpdateOperationsInput | $Enums.Provider_Status
     is_apporved?: BoolFieldUpdateOperationsInput | boolean
@@ -11871,8 +11895,6 @@ export namespace Prisma {
     govt_id_or_tin?: IntFieldUpdateOperationsInput | number
     facebook_profile?: StringFieldUpdateOperationsInput | string
     website_link?: StringFieldUpdateOperationsInput | string
-    area_name?: StringFieldUpdateOperationsInput | string
-    postal_code?: IntFieldUpdateOperationsInput | number
     category?: StringFieldUpdateOperationsInput | string
     status?: EnumProvider_StatusFieldUpdateOperationsInput | $Enums.Provider_Status
     is_apporved?: BoolFieldUpdateOperationsInput | boolean
@@ -12180,6 +12202,7 @@ export namespace Prisma {
 
   export type AddressCountOrderByAggregateInput = {
     address_id?: SortOrder
+    area_name?: SortOrder
     street_address?: SortOrder
     city?: SortOrder
     state?: SortOrder
@@ -12193,6 +12216,7 @@ export namespace Prisma {
 
   export type AddressMaxOrderByAggregateInput = {
     address_id?: SortOrder
+    area_name?: SortOrder
     street_address?: SortOrder
     city?: SortOrder
     state?: SortOrder
@@ -12202,6 +12226,7 @@ export namespace Prisma {
 
   export type AddressMinOrderByAggregateInput = {
     address_id?: SortOrder
+    area_name?: SortOrder
     street_address?: SortOrder
     city?: SortOrder
     state?: SortOrder
@@ -12247,16 +12272,31 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
-  export type EnumUserRoleFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
-    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type EnumUserRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
   export type EnumUSER_STATUSFilter<$PrismaModel = never> = {
@@ -12292,12 +12332,19 @@ export namespace Prisma {
     isNot?: AdminWhereInput | null
   }
 
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     user_id?: SortOrder
     email?: SortOrder
     password?: SortOrder
     fullName?: SortOrder
+    profileImage?: SortOrder
     phone?: SortOrder
+    agree?: SortOrder
     role?: SortOrder
     is_verified?: SortOrder
     status?: SortOrder
@@ -12310,7 +12357,9 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     fullName?: SortOrder
+    profileImage?: SortOrder
     phone?: SortOrder
+    agree?: SortOrder
     role?: SortOrder
     is_verified?: SortOrder
     status?: SortOrder
@@ -12323,12 +12372,40 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     fullName?: SortOrder
+    profileImage?: SortOrder
     phone?: SortOrder
+    agree?: SortOrder
     role?: SortOrder
     is_verified?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type EnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
@@ -12339,14 +12416,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserRoleFilter<$PrismaModel>
     _max?: NestedEnumUserRoleFilter<$PrismaModel>
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type EnumUSER_STATUSWithAggregatesFilter<$PrismaModel = never> = {
@@ -12427,8 +12496,6 @@ export namespace Prisma {
     govt_id_or_tin?: SortOrder
     facebook_profile?: SortOrder
     website_link?: SortOrder
-    area_name?: SortOrder
-    postal_code?: SortOrder
     category?: SortOrder
     status?: SortOrder
     is_apporved?: SortOrder
@@ -12439,7 +12506,6 @@ export namespace Prisma {
     business_license?: SortOrder
     nid_number?: SortOrder
     govt_id_or_tin?: SortOrder
-    postal_code?: SortOrder
   }
 
   export type Service_ProviderMaxOrderByAggregateInput = {
@@ -12452,8 +12518,6 @@ export namespace Prisma {
     govt_id_or_tin?: SortOrder
     facebook_profile?: SortOrder
     website_link?: SortOrder
-    area_name?: SortOrder
-    postal_code?: SortOrder
     category?: SortOrder
     status?: SortOrder
     is_apporved?: SortOrder
@@ -12470,8 +12534,6 @@ export namespace Prisma {
     govt_id_or_tin?: SortOrder
     facebook_profile?: SortOrder
     website_link?: SortOrder
-    area_name?: SortOrder
-    postal_code?: SortOrder
     category?: SortOrder
     status?: SortOrder
     is_apporved?: SortOrder
@@ -12482,7 +12544,6 @@ export namespace Prisma {
     business_license?: SortOrder
     nid_number?: SortOrder
     govt_id_or_tin?: SortOrder
-    postal_code?: SortOrder
   }
 
   export type EnumProvider_StatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -12614,21 +12675,6 @@ export namespace Prisma {
     serviceId?: SortOrder
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
   export type Parent_categoryScalarRelationFilter = {
     is?: Parent_categoryWhereInput
     isNot?: Parent_categoryWhereInput
@@ -12637,11 +12683,6 @@ export namespace Prisma {
   export type ServiceNullableScalarRelationFilter = {
     is?: ServiceWhereInput | null
     isNot?: ServiceWhereInput | null
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
   }
 
   export type Service_CategoryCountOrderByAggregateInput = {
@@ -12672,24 +12713,6 @@ export namespace Prisma {
     is_Active?: SortOrder
     parent_categoryId?: SortOrder
     service_id?: SortOrder
-  }
-
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type Parent_categoryCountOrderByAggregateInput = {
@@ -12778,12 +12801,16 @@ export namespace Prisma {
     connect?: AdminWhereUniqueInput
   }
 
-  export type EnumUserRoleFieldUpdateOperationsInput = {
-    set?: $Enums.UserRole
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
+  }
+
+  export type EnumUserRoleFieldUpdateOperationsInput = {
+    set?: $Enums.UserRole
   }
 
   export type EnumUSER_STATUSFieldUpdateOperationsInput = {
@@ -13078,10 +13105,6 @@ export namespace Prisma {
     update?: XOR<XOR<ServiceUpdateToOneWithWhereWithoutCategoryInput, ServiceUpdateWithoutCategoryInput>, ServiceUncheckedUpdateWithoutCategoryInput>
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
-  }
-
   export type Service_CategoryCreateNestedManyWithoutParent_categoryInput = {
     create?: XOR<Service_CategoryCreateWithoutParent_categoryInput, Service_CategoryUncheckedCreateWithoutParent_categoryInput> | Service_CategoryCreateWithoutParent_categoryInput[] | Service_CategoryUncheckedCreateWithoutParent_categoryInput[]
     connectOrCreate?: Service_CategoryCreateOrConnectWithoutParent_categoryInput | Service_CategoryCreateOrConnectWithoutParent_categoryInput[]
@@ -13193,16 +13216,30 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type NestedEnumUserRoleFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
-    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedEnumUserRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
   export type NestedEnumUSER_STATUSFilter<$PrismaModel = never> = {
@@ -13223,14 +13260,32 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type NestedEnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
-    not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumUserRoleFilter<$PrismaModel>
-    _max?: NestedEnumUserRoleFilter<$PrismaModel>
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -13239,6 +13294,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedEnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUserRoleFilter<$PrismaModel>
+    _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
   export type NestedEnumUSER_STATUSWithAggregatesFilter<$PrismaModel = never> = {
@@ -13298,54 +13363,14 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type UserCreateWithoutAddressInput = {
     user_id?: string
     email: string
     password: string
     fullName: string
+    profileImage?: string | null
     phone: string
+    agree?: boolean
     role?: $Enums.UserRole
     is_verified?: boolean
     status?: $Enums.USER_STATUS
@@ -13360,7 +13385,9 @@ export namespace Prisma {
     email: string
     password: string
     fullName: string
+    profileImage?: string | null
     phone: string
+    agree?: boolean
     role?: $Enums.UserRole
     is_verified?: boolean
     status?: $Enums.USER_STATUS
@@ -13391,7 +13418,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    agree?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumUSER_STATUSFieldUpdateOperationsInput | $Enums.USER_STATUS
@@ -13406,7 +13435,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    agree?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumUSER_STATUSFieldUpdateOperationsInput | $Enums.USER_STATUS
@@ -13418,6 +13449,7 @@ export namespace Prisma {
 
   export type AddressCreateWithoutUserInput = {
     address_id?: string
+    area_name: string
     street_address: string
     city: string
     state: string
@@ -13426,6 +13458,7 @@ export namespace Prisma {
 
   export type AddressUncheckedCreateWithoutUserInput = {
     address_id?: string
+    area_name: string
     street_address: string
     city: string
     state: string
@@ -13446,8 +13479,6 @@ export namespace Prisma {
     govt_id_or_tin: number
     facebook_profile: string
     website_link: string
-    area_name: string
-    postal_code: number
     category: string
     status?: $Enums.Provider_Status
     is_apporved?: boolean
@@ -13464,8 +13495,6 @@ export namespace Prisma {
     govt_id_or_tin: number
     facebook_profile: string
     website_link: string
-    area_name: string
-    postal_code: number
     category: string
     status?: $Enums.Provider_Status
     is_apporved?: boolean
@@ -13512,6 +13541,7 @@ export namespace Prisma {
 
   export type AddressUpdateWithoutUserInput = {
     address_id?: StringFieldUpdateOperationsInput | string
+    area_name?: StringFieldUpdateOperationsInput | string
     street_address?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     state?: StringFieldUpdateOperationsInput | string
@@ -13520,6 +13550,7 @@ export namespace Prisma {
 
   export type AddressUncheckedUpdateWithoutUserInput = {
     address_id?: StringFieldUpdateOperationsInput | string
+    area_name?: StringFieldUpdateOperationsInput | string
     street_address?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     state?: StringFieldUpdateOperationsInput | string
@@ -13546,8 +13577,6 @@ export namespace Prisma {
     govt_id_or_tin?: IntFieldUpdateOperationsInput | number
     facebook_profile?: StringFieldUpdateOperationsInput | string
     website_link?: StringFieldUpdateOperationsInput | string
-    area_name?: StringFieldUpdateOperationsInput | string
-    postal_code?: IntFieldUpdateOperationsInput | number
     category?: StringFieldUpdateOperationsInput | string
     status?: EnumProvider_StatusFieldUpdateOperationsInput | $Enums.Provider_Status
     is_apporved?: BoolFieldUpdateOperationsInput | boolean
@@ -13564,8 +13593,6 @@ export namespace Prisma {
     govt_id_or_tin?: IntFieldUpdateOperationsInput | number
     facebook_profile?: StringFieldUpdateOperationsInput | string
     website_link?: StringFieldUpdateOperationsInput | string
-    area_name?: StringFieldUpdateOperationsInput | string
-    postal_code?: IntFieldUpdateOperationsInput | number
     category?: StringFieldUpdateOperationsInput | string
     status?: EnumProvider_StatusFieldUpdateOperationsInput | $Enums.Provider_Status
     is_apporved?: BoolFieldUpdateOperationsInput | boolean
@@ -13605,7 +13632,9 @@ export namespace Prisma {
     email: string
     password: string
     fullName: string
+    profileImage?: string | null
     phone: string
+    agree?: boolean
     role?: $Enums.UserRole
     is_verified?: boolean
     status?: $Enums.USER_STATUS
@@ -13620,7 +13649,9 @@ export namespace Prisma {
     email: string
     password: string
     fullName: string
+    profileImage?: string | null
     phone: string
+    agree?: boolean
     role?: $Enums.UserRole
     is_verified?: boolean
     status?: $Enums.USER_STATUS
@@ -13651,7 +13682,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    agree?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumUSER_STATUSFieldUpdateOperationsInput | $Enums.USER_STATUS
@@ -13666,7 +13699,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    agree?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumUSER_STATUSFieldUpdateOperationsInput | $Enums.USER_STATUS
@@ -13681,7 +13716,9 @@ export namespace Prisma {
     email: string
     password: string
     fullName: string
+    profileImage?: string | null
     phone: string
+    agree?: boolean
     role?: $Enums.UserRole
     is_verified?: boolean
     status?: $Enums.USER_STATUS
@@ -13696,7 +13733,9 @@ export namespace Prisma {
     email: string
     password: string
     fullName: string
+    profileImage?: string | null
     phone: string
+    agree?: boolean
     role?: $Enums.UserRole
     is_verified?: boolean
     status?: $Enums.USER_STATUS
@@ -13745,7 +13784,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    agree?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumUSER_STATUSFieldUpdateOperationsInput | $Enums.USER_STATUS
@@ -13760,7 +13801,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    agree?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumUSER_STATUSFieldUpdateOperationsInput | $Enums.USER_STATUS
@@ -13894,8 +13937,6 @@ export namespace Prisma {
     govt_id_or_tin: number
     facebook_profile: string
     website_link: string
-    area_name: string
-    postal_code: number
     category: string
     status?: $Enums.Provider_Status
     is_apporved?: boolean
@@ -13913,8 +13954,6 @@ export namespace Prisma {
     govt_id_or_tin: number
     facebook_profile: string
     website_link: string
-    area_name: string
-    postal_code: number
     category: string
     status?: $Enums.Provider_Status
     is_apporved?: boolean
@@ -13981,8 +14020,6 @@ export namespace Prisma {
     govt_id_or_tin?: IntFieldUpdateOperationsInput | number
     facebook_profile?: StringFieldUpdateOperationsInput | string
     website_link?: StringFieldUpdateOperationsInput | string
-    area_name?: StringFieldUpdateOperationsInput | string
-    postal_code?: IntFieldUpdateOperationsInput | number
     category?: StringFieldUpdateOperationsInput | string
     status?: EnumProvider_StatusFieldUpdateOperationsInput | $Enums.Provider_Status
     is_apporved?: BoolFieldUpdateOperationsInput | boolean
@@ -14000,8 +14037,6 @@ export namespace Prisma {
     govt_id_or_tin?: IntFieldUpdateOperationsInput | number
     facebook_profile?: StringFieldUpdateOperationsInput | string
     website_link?: StringFieldUpdateOperationsInput | string
-    area_name?: StringFieldUpdateOperationsInput | string
-    postal_code?: IntFieldUpdateOperationsInput | number
     category?: StringFieldUpdateOperationsInput | string
     status?: EnumProvider_StatusFieldUpdateOperationsInput | $Enums.Provider_Status
     is_apporved?: BoolFieldUpdateOperationsInput | boolean
