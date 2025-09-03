@@ -40,7 +40,7 @@ const createAdminIntoDb = async (req) => {
     };
     const result = prisma.$transaction(async (trns) => {
         const user = await trns.user.create({
-            data: userData,
+            data: { ...userData, role: prisma_1.UserRole.ADMIN },
         });
         const setAddress = await trns.address.create({
             data: {
@@ -59,36 +59,84 @@ const createAdminIntoDb = async (req) => {
     });
     return result;
 };
-const createServicePorvider = async (req) => {
+const createServiceProvider = async (req) => {
     const data = req.body;
-    const hashedPassword = await bcrypt_1.default.hash(data.password, 10);
+    // hash password only if new user is being created
+    const hashedPassword = data.password
+        ? await bcrypt_1.default.hash(data.password, 10)
+        : null;
     const { address, ...providerData } = data;
     const userData = {
         email: data.email,
         password: hashedPassword,
         fullName: data.fullName,
         phone: data.phone,
-        role: data.role,
+        role: prisma_1.UserRole.SERVICE_PROVIDER,
     };
-    const keyToRemove = ['password', 'role', 'phone'];
+    // remove fields that should not go into provider table
+    const keyToRemove = ['password', 'role', 'phone', 'agree'];
     keyToRemove.forEach((key) => delete providerData[key]);
     const result = await prisma.$transaction(async (trns) => {
-        const createUser = await trns.user.create({
-            data: userData,
+        // check if user already exists (with relations)
+        const existingUser = await trns.user.findUnique({
+            where: { email: data.email },
+            include: { address: true, service_provider: true },
         });
-        const setAddress = await trns.address.create({
-            data: {
-                ...address,
-                user_id: createUser.user_id,
-            },
+        let user;
+        if (!existingUser) {
+            // new user → create user + address
+            user = await trns.user.create({
+                data: userData,
+            });
+            await trns.address.create({
+                data: {
+                    ...address,
+                    user_id: user.user_id,
+                },
+            });
+        }
+        else {
+            // user already exists → upgrade role if not SERVICE_PROVIDER
+            if (existingUser.role !== prisma_1.UserRole.SERVICE_PROVIDER) {
+                user = await trns.user.update({
+                    where: { user_id: existingUser.user_id },
+                    data: {
+                        role: prisma_1.UserRole.SERVICE_PROVIDER,
+                    },
+                });
+            }
+            else {
+                user = existingUser; // just reuse
+            }
+            // create address only if missing
+            if (!existingUser.address && address) {
+                await trns.address.create({
+                    data: {
+                        ...address,
+                        user_id: existingUser.user_id,
+                    },
+                });
+            }
+        }
+        // check if service provider already exists
+        let provider = await trns.service_Provider.findUnique({
+            where: { email: user.email },
         });
-        const createProvider = await trns.service_Provider.create({
-            data: providerData,
-        });
+        if (!provider) {
+            provider = await trns.service_Provider.create({
+                data: {
+                    ...providerData,
+                    email: user.email,
+                    fullName: user.fullName,
+                },
+            });
+        }
+        else {
+            throw new Error('User is already registered as a service provider');
+        }
         return {
-            createUser,
-            setAddress,
-            createProvider,
+            user,
+            provider,
         };
     });
     return result;
@@ -111,6 +159,6 @@ const getMe = async (req) => {
 exports.UserService = {
     createUserIntoDb,
     createAdminIntoDb,
-    createServicePorvider,
+    createServiceProvider,
     getMe,
 };

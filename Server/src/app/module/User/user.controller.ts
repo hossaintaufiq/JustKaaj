@@ -24,7 +24,7 @@ const createAdmin: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 const createServicePorvider: RequestHandler = catchAsync(async (req, res) => {
-  const result = await UserService.createServicePorvider(req);
+  const result = await UserService.createServiceProvider(req);
   sendResponse(res, {
     success: true,
     statusCode: status.CREATED,

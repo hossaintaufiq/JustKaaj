@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useUser } from "@/context/UserContext";
 import { RegisterUser, RegisterProvider } from "@/service/Auth";
 import { TRegisterUser } from "@/types";
 import Link from "next/link";
@@ -8,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 const RegistrationForm = ({ activeTab }: any) => {
+  const { setIsLoading, isLoading } = useUser();
   const {
     register,
     handleSubmit,
@@ -20,6 +22,7 @@ const RegistrationForm = ({ activeTab }: any) => {
 
   const onSubmit = async (data: TRegisterUser) => {
     try {
+      setIsLoading(true);
       let res;
 
       if (activeTab === "provider") {
@@ -364,14 +367,15 @@ const RegistrationForm = ({ activeTab }: any) => {
       {/* Submit */}
       <button
         type="submit"
-        disabled={!watch("agree")}
-        className={`w-full py-2 rounded-md font-medium transition-colors ${
-          watch("agree")
-            ? "bg-green-500 text-white hover:bg-green-600"
-            : "bg-gray-300 text-gray-500 cursor-not-allowed"
-        }`}
+        disabled={isLoading || !watch("agree")}
+        className={`w-full py-2 rounded-md font-medium transition-colors 
+    ${
+      isLoading || !watch("agree")
+        ? "bg-gray-400 cursor-not-allowed"
+        : "bg-green-500 hover:bg-green-600 text-white"
+    }`}
       >
-        Register
+        {isLoading ? "Registering..." : "Register"}
       </button>
     </form>
   );

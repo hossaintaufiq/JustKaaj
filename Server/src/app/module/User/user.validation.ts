@@ -5,6 +5,7 @@ const addressSchema = z.object({
   city: z.string(),
   state: z.string(),
   postal_code: z.number(),
+  area_name: z.string(),
 });
 
 const createAdminSchemaValidation = z.object({
@@ -34,13 +35,11 @@ const createServiceProviderSchema = z.object({
     phone: z.string(),
     address: addressSchema,
     business_name: z.string(),
-    business_license: z.number(),
-    nid_number: z.number(),
-    govt_id_or_tin: z.number(),
+    business_license: z.string().nonempty(),
+    nid_number: z.string().nonempty(),
+    govt_id_or_tin: z.string().nonempty(),
     facebook_profile: z.string().url().optional(),
     website_link: z.string().url().optional(),
-    area_name: z.string(),
-    postal_code: z.number(),
     category: z.string(),
   }),
 });

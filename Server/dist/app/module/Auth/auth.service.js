@@ -7,6 +7,7 @@ exports.AuthService = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const prisma_1 = require("../../../../generated/prisma");
+const config_1 = __importDefault(require("../../config"));
 const prisma = new prisma_1.PrismaClient();
 const userLogin = async (payload) => {
     const userData = await prisma.user.findUniqueOrThrow({
@@ -19,10 +20,10 @@ const userLogin = async (payload) => {
     if (!checkingPassword) {
         throw new Error('check your password');
     }
-    const accessToken = await jsonwebtoken_1.default.sign({ id: userData.user_id, email: userData.email, role: userData.role }, process.env.JWT_ACCESS_SECRET, {
-        expiresIn: '15m',
+    const accessToken = await jsonwebtoken_1.default.sign({ id: userData.user_id, email: userData.email, role: userData.role }, config_1.default.jwt_access_token_secret, {
+        expiresIn: '15d',
     });
-    const refreshToken = jsonwebtoken_1.default.sign({ id: userData.user_id, email: userData.email, role: userData.role }, process.env.JWT_REFRESH_SECRET, {
+    const refreshToken = jsonwebtoken_1.default.sign({ id: userData.user_id, email: userData.email, role: userData.role }, config_1.default.jwt_refresh_token_secret, {
         expiresIn: '30d',
     });
     return {
@@ -33,7 +34,7 @@ const userLogin = async (payload) => {
 const refreshToken = async (token) => {
     let decoded;
     try {
-        decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_REFRESH_SECRET);
+        decoded = jsonwebtoken_1.default.verify(token, config_1.default.jwt_refresh_token_secret);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
     }
     catch (err) {
@@ -49,8 +50,8 @@ const refreshToken = async (token) => {
         id: (await userData).user_id,
         email: (await userData).email,
         role: (await userData).role,
-    }, process.env.JWT_ACCESS_SECRET, {
-        expiresIn: '15m',
+    }, config_1.default.jwt_access_token_secret, {
+        expiresIn: '15d',
     });
     return {
         accessToken,

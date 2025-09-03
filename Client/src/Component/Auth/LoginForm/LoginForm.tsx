@@ -17,8 +17,8 @@ const LoginForm = () => {
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
-      email: "mdminhajulislamshobuj@gmail.com",
-      password: "Password",
+      email: "mdminhajulislam@gmail.com",
+      password: "Password12",
     },
   });
 
@@ -29,8 +29,8 @@ const LoginForm = () => {
 
   const onSubmit = async (data: FormValues) => {
     try {
-      const res = await LoginUser(data);
       setIsLoading(true);
+      const res = await LoginUser(data);
       getCurrentUser();
       if (res?.success) {
         toast.success(res?.message);

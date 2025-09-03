@@ -14,5 +14,5 @@ const router = express_1.default.Router();
 router.post('/create-user', (0, validateRequest_1.default)(user_validation_1.UserValidation.createUserSchemaValidation), user_controller_1.UserController.createUser);
 router.post('/create-admin', (0, auth_1.default)(prisma_1.UserRole.SUPER_ADMIN), (0, validateRequest_1.default)(user_validation_1.UserValidation.createAdminSchemaValidation), user_controller_1.UserController.createAdmin);
 router.post('/create-provider', (0, validateRequest_1.default)(user_validation_1.UserValidation.createServiceProviderSchema), user_controller_1.UserController.createServicePorvider);
-router.get('/getMe', (0, auth_1.default)(prisma_1.UserRole.SERVICE_PROVIDER), user_controller_1.UserController.getMe);
+router.get('/getMe', (0, auth_1.default)(prisma_1.UserRole.SERVICE_PROVIDER, prisma_1.UserRole.USER, prisma_1.UserRole.ADMIN), user_controller_1.UserController.getMe);
 exports.UserRoute = router;

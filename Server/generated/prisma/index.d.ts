@@ -5046,22 +5046,8 @@ export namespace Prisma {
 
   export type AggregateService_Provider = {
     _count: Service_ProviderCountAggregateOutputType | null
-    _avg: Service_ProviderAvgAggregateOutputType | null
-    _sum: Service_ProviderSumAggregateOutputType | null
     _min: Service_ProviderMinAggregateOutputType | null
     _max: Service_ProviderMaxAggregateOutputType | null
-  }
-
-  export type Service_ProviderAvgAggregateOutputType = {
-    business_license: number | null
-    nid_number: number | null
-    govt_id_or_tin: number | null
-  }
-
-  export type Service_ProviderSumAggregateOutputType = {
-    business_license: number | null
-    nid_number: number | null
-    govt_id_or_tin: number | null
   }
 
   export type Service_ProviderMinAggregateOutputType = {
@@ -5069,9 +5055,9 @@ export namespace Prisma {
     email: string | null
     fullName: string | null
     business_name: string | null
-    business_license: number | null
-    nid_number: number | null
-    govt_id_or_tin: number | null
+    business_license: string | null
+    nid_number: string | null
+    govt_id_or_tin: string | null
     facebook_profile: string | null
     website_link: string | null
     category: string | null
@@ -5085,9 +5071,9 @@ export namespace Prisma {
     email: string | null
     fullName: string | null
     business_name: string | null
-    business_license: number | null
-    nid_number: number | null
-    govt_id_or_tin: number | null
+    business_license: string | null
+    nid_number: string | null
+    govt_id_or_tin: string | null
     facebook_profile: string | null
     website_link: string | null
     category: string | null
@@ -5113,18 +5099,6 @@ export namespace Prisma {
     _all: number
   }
 
-
-  export type Service_ProviderAvgAggregateInputType = {
-    business_license?: true
-    nid_number?: true
-    govt_id_or_tin?: true
-  }
-
-  export type Service_ProviderSumAggregateInputType = {
-    business_license?: true
-    nid_number?: true
-    govt_id_or_tin?: true
-  }
 
   export type Service_ProviderMinAggregateInputType = {
     id?: true
@@ -5213,18 +5187,6 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Select which fields to average
-    **/
-    _avg?: Service_ProviderAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: Service_ProviderSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
      * Select which fields to find the minimum value
     **/
     _min?: Service_ProviderMinAggregateInputType
@@ -5255,8 +5217,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: Service_ProviderCountAggregateInputType | true
-    _avg?: Service_ProviderAvgAggregateInputType
-    _sum?: Service_ProviderSumAggregateInputType
     _min?: Service_ProviderMinAggregateInputType
     _max?: Service_ProviderMaxAggregateInputType
   }
@@ -5266,9 +5226,9 @@ export namespace Prisma {
     email: string
     fullName: string
     business_name: string
-    business_license: number
-    nid_number: number
-    govt_id_or_tin: number
+    business_license: string
+    nid_number: string
+    govt_id_or_tin: string
     facebook_profile: string
     website_link: string
     category: string
@@ -5276,8 +5236,6 @@ export namespace Prisma {
     is_apporved: boolean
     submitted_at: Date
     _count: Service_ProviderCountAggregateOutputType | null
-    _avg: Service_ProviderAvgAggregateOutputType | null
-    _sum: Service_ProviderSumAggregateOutputType | null
     _min: Service_ProviderMinAggregateOutputType | null
     _max: Service_ProviderMaxAggregateOutputType | null
   }
@@ -5389,9 +5347,9 @@ export namespace Prisma {
       email: string
       fullName: string
       business_name: string
-      business_license: number
-      nid_number: number
-      govt_id_or_tin: number
+      business_license: string
+      nid_number: string
+      govt_id_or_tin: string
       facebook_profile: string
       website_link: string
       category: string
@@ -5827,9 +5785,9 @@ export namespace Prisma {
     readonly email: FieldRef<"Service_Provider", 'String'>
     readonly fullName: FieldRef<"Service_Provider", 'String'>
     readonly business_name: FieldRef<"Service_Provider", 'String'>
-    readonly business_license: FieldRef<"Service_Provider", 'Int'>
-    readonly nid_number: FieldRef<"Service_Provider", 'Int'>
-    readonly govt_id_or_tin: FieldRef<"Service_Provider", 'Int'>
+    readonly business_license: FieldRef<"Service_Provider", 'String'>
+    readonly nid_number: FieldRef<"Service_Provider", 'String'>
+    readonly govt_id_or_tin: FieldRef<"Service_Provider", 'String'>
     readonly facebook_profile: FieldRef<"Service_Provider", 'String'>
     readonly website_link: FieldRef<"Service_Provider", 'String'>
     readonly category: FieldRef<"Service_Provider", 'String'>
@@ -11189,9 +11147,9 @@ export namespace Prisma {
     email?: StringFilter<"Service_Provider"> | string
     fullName?: StringFilter<"Service_Provider"> | string
     business_name?: StringFilter<"Service_Provider"> | string
-    business_license?: IntFilter<"Service_Provider"> | number
-    nid_number?: IntFilter<"Service_Provider"> | number
-    govt_id_or_tin?: IntFilter<"Service_Provider"> | number
+    business_license?: StringFilter<"Service_Provider"> | string
+    nid_number?: StringFilter<"Service_Provider"> | string
+    govt_id_or_tin?: StringFilter<"Service_Provider"> | string
     facebook_profile?: StringFilter<"Service_Provider"> | string
     website_link?: StringFilter<"Service_Provider"> | string
     category?: StringFilter<"Service_Provider"> | string
@@ -11228,9 +11186,9 @@ export namespace Prisma {
     NOT?: Service_ProviderWhereInput | Service_ProviderWhereInput[]
     fullName?: StringFilter<"Service_Provider"> | string
     business_name?: StringFilter<"Service_Provider"> | string
-    business_license?: IntFilter<"Service_Provider"> | number
-    nid_number?: IntFilter<"Service_Provider"> | number
-    govt_id_or_tin?: IntFilter<"Service_Provider"> | number
+    business_license?: StringFilter<"Service_Provider"> | string
+    nid_number?: StringFilter<"Service_Provider"> | string
+    govt_id_or_tin?: StringFilter<"Service_Provider"> | string
     facebook_profile?: StringFilter<"Service_Provider"> | string
     website_link?: StringFilter<"Service_Provider"> | string
     category?: StringFilter<"Service_Provider"> | string
@@ -11256,10 +11214,8 @@ export namespace Prisma {
     is_apporved?: SortOrder
     submitted_at?: SortOrder
     _count?: Service_ProviderCountOrderByAggregateInput
-    _avg?: Service_ProviderAvgOrderByAggregateInput
     _max?: Service_ProviderMaxOrderByAggregateInput
     _min?: Service_ProviderMinOrderByAggregateInput
-    _sum?: Service_ProviderSumOrderByAggregateInput
   }
 
   export type Service_ProviderScalarWhereWithAggregatesInput = {
@@ -11270,9 +11226,9 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"Service_Provider"> | string
     fullName?: StringWithAggregatesFilter<"Service_Provider"> | string
     business_name?: StringWithAggregatesFilter<"Service_Provider"> | string
-    business_license?: IntWithAggregatesFilter<"Service_Provider"> | number
-    nid_number?: IntWithAggregatesFilter<"Service_Provider"> | number
-    govt_id_or_tin?: IntWithAggregatesFilter<"Service_Provider"> | number
+    business_license?: StringWithAggregatesFilter<"Service_Provider"> | string
+    nid_number?: StringWithAggregatesFilter<"Service_Provider"> | string
+    govt_id_or_tin?: StringWithAggregatesFilter<"Service_Provider"> | string
     facebook_profile?: StringWithAggregatesFilter<"Service_Provider"> | string
     website_link?: StringWithAggregatesFilter<"Service_Provider"> | string
     category?: StringWithAggregatesFilter<"Service_Provider"> | string
@@ -11790,9 +11746,9 @@ export namespace Prisma {
     id?: string
     fullName: string
     business_name: string
-    business_license: number
-    nid_number: number
-    govt_id_or_tin: number
+    business_license: string
+    nid_number: string
+    govt_id_or_tin: string
     facebook_profile: string
     website_link: string
     category: string
@@ -11808,9 +11764,9 @@ export namespace Prisma {
     email: string
     fullName: string
     business_name: string
-    business_license: number
-    nid_number: number
-    govt_id_or_tin: number
+    business_license: string
+    nid_number: string
+    govt_id_or_tin: string
     facebook_profile: string
     website_link: string
     category: string
@@ -11824,9 +11780,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     business_name?: StringFieldUpdateOperationsInput | string
-    business_license?: IntFieldUpdateOperationsInput | number
-    nid_number?: IntFieldUpdateOperationsInput | number
-    govt_id_or_tin?: IntFieldUpdateOperationsInput | number
+    business_license?: StringFieldUpdateOperationsInput | string
+    nid_number?: StringFieldUpdateOperationsInput | string
+    govt_id_or_tin?: StringFieldUpdateOperationsInput | string
     facebook_profile?: StringFieldUpdateOperationsInput | string
     website_link?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
@@ -11842,9 +11798,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     business_name?: StringFieldUpdateOperationsInput | string
-    business_license?: IntFieldUpdateOperationsInput | number
-    nid_number?: IntFieldUpdateOperationsInput | number
-    govt_id_or_tin?: IntFieldUpdateOperationsInput | number
+    business_license?: StringFieldUpdateOperationsInput | string
+    nid_number?: StringFieldUpdateOperationsInput | string
+    govt_id_or_tin?: StringFieldUpdateOperationsInput | string
     facebook_profile?: StringFieldUpdateOperationsInput | string
     website_link?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
@@ -11859,9 +11815,9 @@ export namespace Prisma {
     email: string
     fullName: string
     business_name: string
-    business_license: number
-    nid_number: number
-    govt_id_or_tin: number
+    business_license: string
+    nid_number: string
+    govt_id_or_tin: string
     facebook_profile: string
     website_link: string
     category: string
@@ -11874,9 +11830,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     business_name?: StringFieldUpdateOperationsInput | string
-    business_license?: IntFieldUpdateOperationsInput | number
-    nid_number?: IntFieldUpdateOperationsInput | number
-    govt_id_or_tin?: IntFieldUpdateOperationsInput | number
+    business_license?: StringFieldUpdateOperationsInput | string
+    nid_number?: StringFieldUpdateOperationsInput | string
+    govt_id_or_tin?: StringFieldUpdateOperationsInput | string
     facebook_profile?: StringFieldUpdateOperationsInput | string
     website_link?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
@@ -11890,9 +11846,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     business_name?: StringFieldUpdateOperationsInput | string
-    business_license?: IntFieldUpdateOperationsInput | number
-    nid_number?: IntFieldUpdateOperationsInput | number
-    govt_id_or_tin?: IntFieldUpdateOperationsInput | number
+    business_license?: StringFieldUpdateOperationsInput | string
+    nid_number?: StringFieldUpdateOperationsInput | string
+    govt_id_or_tin?: StringFieldUpdateOperationsInput | string
     facebook_profile?: StringFieldUpdateOperationsInput | string
     website_link?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
@@ -12502,12 +12458,6 @@ export namespace Prisma {
     submitted_at?: SortOrder
   }
 
-  export type Service_ProviderAvgOrderByAggregateInput = {
-    business_license?: SortOrder
-    nid_number?: SortOrder
-    govt_id_or_tin?: SortOrder
-  }
-
   export type Service_ProviderMaxOrderByAggregateInput = {
     id?: SortOrder
     email?: SortOrder
@@ -12538,12 +12488,6 @@ export namespace Prisma {
     status?: SortOrder
     is_apporved?: SortOrder
     submitted_at?: SortOrder
-  }
-
-  export type Service_ProviderSumOrderByAggregateInput = {
-    business_license?: SortOrder
-    nid_number?: SortOrder
-    govt_id_or_tin?: SortOrder
   }
 
   export type EnumProvider_StatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -13474,9 +13418,9 @@ export namespace Prisma {
     id?: string
     fullName: string
     business_name: string
-    business_license: number
-    nid_number: number
-    govt_id_or_tin: number
+    business_license: string
+    nid_number: string
+    govt_id_or_tin: string
     facebook_profile: string
     website_link: string
     category: string
@@ -13490,9 +13434,9 @@ export namespace Prisma {
     id?: string
     fullName: string
     business_name: string
-    business_license: number
-    nid_number: number
-    govt_id_or_tin: number
+    business_license: string
+    nid_number: string
+    govt_id_or_tin: string
     facebook_profile: string
     website_link: string
     category: string
@@ -13572,9 +13516,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     business_name?: StringFieldUpdateOperationsInput | string
-    business_license?: IntFieldUpdateOperationsInput | number
-    nid_number?: IntFieldUpdateOperationsInput | number
-    govt_id_or_tin?: IntFieldUpdateOperationsInput | number
+    business_license?: StringFieldUpdateOperationsInput | string
+    nid_number?: StringFieldUpdateOperationsInput | string
+    govt_id_or_tin?: StringFieldUpdateOperationsInput | string
     facebook_profile?: StringFieldUpdateOperationsInput | string
     website_link?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
@@ -13588,9 +13532,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     business_name?: StringFieldUpdateOperationsInput | string
-    business_license?: IntFieldUpdateOperationsInput | number
-    nid_number?: IntFieldUpdateOperationsInput | number
-    govt_id_or_tin?: IntFieldUpdateOperationsInput | number
+    business_license?: StringFieldUpdateOperationsInput | string
+    nid_number?: StringFieldUpdateOperationsInput | string
+    govt_id_or_tin?: StringFieldUpdateOperationsInput | string
     facebook_profile?: StringFieldUpdateOperationsInput | string
     website_link?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
@@ -13932,9 +13876,9 @@ export namespace Prisma {
     id?: string
     fullName: string
     business_name: string
-    business_license: number
-    nid_number: number
-    govt_id_or_tin: number
+    business_license: string
+    nid_number: string
+    govt_id_or_tin: string
     facebook_profile: string
     website_link: string
     category: string
@@ -13949,9 +13893,9 @@ export namespace Prisma {
     email: string
     fullName: string
     business_name: string
-    business_license: number
-    nid_number: number
-    govt_id_or_tin: number
+    business_license: string
+    nid_number: string
+    govt_id_or_tin: string
     facebook_profile: string
     website_link: string
     category: string
@@ -14015,9 +13959,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     business_name?: StringFieldUpdateOperationsInput | string
-    business_license?: IntFieldUpdateOperationsInput | number
-    nid_number?: IntFieldUpdateOperationsInput | number
-    govt_id_or_tin?: IntFieldUpdateOperationsInput | number
+    business_license?: StringFieldUpdateOperationsInput | string
+    nid_number?: StringFieldUpdateOperationsInput | string
+    govt_id_or_tin?: StringFieldUpdateOperationsInput | string
     facebook_profile?: StringFieldUpdateOperationsInput | string
     website_link?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
@@ -14032,9 +13976,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     business_name?: StringFieldUpdateOperationsInput | string
-    business_license?: IntFieldUpdateOperationsInput | number
-    nid_number?: IntFieldUpdateOperationsInput | number
-    govt_id_or_tin?: IntFieldUpdateOperationsInput | number
+    business_license?: StringFieldUpdateOperationsInput | string
+    nid_number?: StringFieldUpdateOperationsInput | string
+    govt_id_or_tin?: StringFieldUpdateOperationsInput | string
     facebook_profile?: StringFieldUpdateOperationsInput | string
     website_link?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string

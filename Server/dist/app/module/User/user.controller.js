@@ -27,7 +27,7 @@ const createAdmin = (0, catchAsync_1.default)(async (req, res) => {
     });
 });
 const createServicePorvider = (0, catchAsync_1.default)(async (req, res) => {
-    const result = await user_service_1.UserService.createServicePorvider(req);
+    const result = await user_service_1.UserService.createServiceProvider(req);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.CREATED,

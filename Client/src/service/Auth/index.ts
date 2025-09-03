@@ -6,13 +6,16 @@ import { cookies } from "next/headers";
 
 export const RegisterUser = async (userdata: TRegisterUser) => {
   try {
-    const res = await fetch(`http://localhost:5000/api/user/create-user`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userdata),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/user/create-user`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userdata),
+      }
+    );
 
     const result = await res.json();
     if (result.success) {
@@ -26,13 +29,16 @@ export const RegisterUser = async (userdata: TRegisterUser) => {
 };
 export const RegisterProvider = async (userdata: TRegisterUser) => {
   try {
-    const res = await fetch(`http://localhost:5000/api/user/create-provider`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userdata),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/user/create-provider`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userdata),
+      }
+    );
 
     const result = await res.json();
     if (result.success) {
@@ -47,7 +53,7 @@ export const RegisterProvider = async (userdata: TRegisterUser) => {
 
 export const LoginUser = async (userdata: TLoginUser) => {
   try {
-    const res = await fetch(`http://localhost:5000/api/auth/login`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -94,13 +100,13 @@ export const myProfile = async () => {
   }
 
   try {
-    const res = await fetch("http://localhost:5000/api/user/getMe", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/getMe`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
       },
-      cache: "no-store",
+      cache: "force-cache",
     });
     const result = await res.json();
     return result;
