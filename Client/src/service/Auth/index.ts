@@ -2,6 +2,7 @@
 
 import { IUser, RegisterUser, TLoginUser } from "@/types";
 import { jwtDecode } from "jwt-decode";
+import { cookies } from "next/headers";
 
 // Store token in localStorage
 const setToken = (token: string) => {
@@ -104,19 +105,19 @@ export const logout = () => {
 };
 
 // ---------------- GET CURRENT USER ---------------- 
-export const getCurrentUser = (): IUser | null => {
-  const token = getToken();
-  if (!token) return null;
-  try {
-    return jwtDecode<IUser>(token);
-  } catch {
+// export const getCurrentUser = (): IUser | null => {
+//   const token = getToken();
+//   if (!token) return null;
+//   try {
+//     return jwtDecode<IUser>(token);
+//   } catch {
 
-    (await cookies()).delete("accessToken");
-  } catch (error) {
-    console.error("Error during logout:", error);
-    throw new Error("Logout failed");
-  }
-};
+//     (await cookies()).delete("accessToken");
+//   } catch (error) {
+//     console.error("Error during logout:", error);
+//     throw new Error("Logout failed");
+//   }
+// };
 
 export const getCurrentUser = async (): Promise<IUser | null> => {
   const accessToken = (await cookies()).get("accessToken")?.value;
