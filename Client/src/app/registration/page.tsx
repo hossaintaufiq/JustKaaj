@@ -19,7 +19,7 @@ export default function Registration() {
     handleSubmit,
     reset,
     formState: { errors },
-    watch,
+    // watch,
   } = useForm<RegisterUser>();
   const router = useRouter();
 
@@ -29,8 +29,6 @@ export default function Registration() {
       console.log("Submitting registration data:", data);
       
       const res = await Register(data);
-      console.log("Registration response:", res);
-      
       if (res?.success) {
         toast.success(res?.message || "Registration successful!");
         reset();

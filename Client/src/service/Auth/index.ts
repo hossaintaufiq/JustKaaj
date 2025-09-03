@@ -28,6 +28,8 @@ const removeToken = () => {
 // ---------------- REGISTER ---------------- 
 export const Register = async (userdata: RegisterUser) => {
   try {
+
+
     console.log("Attempting registration with data:", userdata);
     
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/user/create-user`, {
@@ -63,6 +65,7 @@ export const Register = async (userdata: RegisterUser) => {
 // ---------------- LOGIN ---------------- 
 export const LoginUser = async (userdata: TLoginUser) => {
   try {
+// <<<<<<< HEAD
     console.log("Attempting login with data:", userdata);
     
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/login`, {
@@ -107,6 +110,22 @@ export const getCurrentUser = (): IUser | null => {
   try {
     return jwtDecode<IUser>(token);
   } catch {
+
+    (await cookies()).delete("accessToken");
+  } catch (error) {
+    console.error("Error during logout:", error);
+    throw new Error("Logout failed");
+  }
+};
+
+export const getCurrentUser = async (): Promise<IUser | null> => {
+  const accessToken = (await cookies()).get("accessToken")?.value;
+  let decodedData = null;
+
+  if (accessToken) {
+    decodedData = await jwtDecode(accessToken);
+    return decodedData;
+  } else {
     return null;
   }
 };
@@ -119,7 +138,7 @@ export const myProfile = async () => {
   }
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/my-profile`, {
+    const res = await fetch("http://localhost:5000/api/user/getMe", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -140,3 +159,8 @@ export const myProfile = async () => {
     throw new Error(error instanceof Error ? error.message : "Failed to fetch profile");
   }
 };
+
+// const res = await fetch("http://localhost:5000/api/user/create-user", { ... });
+// const res = await fetch("http://147.79.68.37:5000/api/auth/login", { ... });
+// const res = await fetch("api/auth/my-profile", { ... });
+
