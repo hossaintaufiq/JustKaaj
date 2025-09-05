@@ -34,6 +34,7 @@ const RegistrationForm = ({ activeTab }: any) => {
         res = await RegisterProvider(payload);
       } else {
         res = await RegisterUser(data);
+        console.log(res);
       }
 
       if (res?.success) {
@@ -241,7 +242,7 @@ const RegistrationForm = ({ activeTab }: any) => {
                 Business License No.
               </label>
               <input
-                type="number"
+                type="text"
                 placeholder="123456"
                 {...register("provider.business_license", {
                   required: "Business license number is required",
@@ -260,7 +261,7 @@ const RegistrationForm = ({ activeTab }: any) => {
                 NID Number
               </label>
               <input
-                type="number"
+                type="text"
                 placeholder="1234567890"
                 {...register("provider.nid_number", {
                   required: "NID number is required",
@@ -281,7 +282,7 @@ const RegistrationForm = ({ activeTab }: any) => {
                 Govt. ID / TIN
               </label>
               <input
-                type="number"
+                type="text"
                 placeholder="123456789"
                 {...register("provider.govt_id_or_tin", {
                   required: "Govt. ID or TIN is required",

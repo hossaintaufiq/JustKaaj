@@ -24,9 +24,9 @@ export type TRegisterUser = {
 
   provider?: {
     business_name: string;
-    business_license: number;
-    nid_number: number;
-    govt_id_or_tin: number;
+    business_license: string;
+    nid_number: string;
+    govt_id_or_tin: string;
     facebook_profile?: string;
     website_link?: string;
     category: string;
