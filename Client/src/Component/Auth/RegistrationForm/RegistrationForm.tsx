@@ -34,12 +34,11 @@ const RegistrationForm = ({ activeTab }: any) => {
         res = await RegisterProvider(payload);
       } else {
         res = await RegisterUser(data);
-        console.log(res);
       }
 
       if (res?.success) {
         toast.success(res?.message || "Registration successful!");
-        router.push("/");
+        router.push("/login");
       } else {
         toast.error(res?.message || "Something went wrong. Please try again.");
       }
@@ -246,7 +245,6 @@ const RegistrationForm = ({ activeTab }: any) => {
                 placeholder="123456"
                 {...register("provider.business_license", {
                   required: "Business license number is required",
-                  valueAsNumber: true,
                 })}
                 className={`w-full px-4 py-2 rounded-md border text-gray-900 placeholder:text-gray-400 ${
                   errors.provider?.business_license
@@ -265,7 +263,6 @@ const RegistrationForm = ({ activeTab }: any) => {
                 placeholder="1234567890"
                 {...register("provider.nid_number", {
                   required: "NID number is required",
-                  valueAsNumber: true,
                 })}
                 className={`w-full px-4 py-2 rounded-md border text-gray-900 placeholder:text-gray-400 ${
                   errors.provider?.nid_number
@@ -286,7 +283,6 @@ const RegistrationForm = ({ activeTab }: any) => {
                 placeholder="123456789"
                 {...register("provider.govt_id_or_tin", {
                   required: "Govt. ID or TIN is required",
-                  valueAsNumber: true,
                 })}
                 className={`w-full px-4 py-2 rounded-md border text-gray-900 placeholder:text-gray-400 ${
                   errors.provider?.govt_id_or_tin
