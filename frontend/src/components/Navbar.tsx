@@ -41,7 +41,7 @@ export default function Navbar({ onLinkClick }: NavbarProps) {
 
   const navLinks = [
     { href: '/', label: 'Home' },
-    { href: '/service', label: 'All Services' },
+    { href: '/services', label: 'All Services' },
     { href: '/become-provider', label: 'Become a Provider' },
     { href: '/signin', label: 'Sign In' },
     { href: '/join', label: 'Join' },
