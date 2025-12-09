@@ -41,9 +41,10 @@ export default function Navbar({ onLinkClick }: NavbarProps) {
 
   const navLinks = [
     { href: '/', label: 'Home' },
-    { href: '/about', label: 'About Us' },
+   
     { href: '/become-provider', label: 'Become a Provider' },
     { href: '/signin', label: 'Sign In' },
+    { href: '/join', label: 'Join' },
   ];
 
   const isActive = (href: string) => {
@@ -56,7 +57,7 @@ export default function Navbar({ onLinkClick }: NavbarProps) {
   return (
     <div className="navbar-container relative">
       {/* Desktop Navigation */}
-      <nav className="hidden md:flex items-center space-x-4 lg:space-x-6 xl:space-x-8">
+      <nav className="hidden md:flex items-center space-x-4 lg:space-x-4 xl:space-x-6">
         {navLinks.map((link) => {
           const active = isActive(link.href);
           return (
