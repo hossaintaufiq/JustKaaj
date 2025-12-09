@@ -1,9 +1,9 @@
 import express from 'express';
 import { ServiceController } from './service.controller';
 import auth from '../../middlewares/auth';
-import { UserRole } from '../../../../generated/prisma';
 import validateRequest from '../../middlewares/validateRequest';
 import { ServiceValidation } from './service.validation';
+import { UserRole } from '@prisma/client';
 
 const router = express.Router();
 
@@ -14,6 +14,23 @@ router.post(
   ServiceController.createService
 );
 router.get('/', ServiceController.getAllServices);
+router.get(
+  '/my-services',
+  auth(UserRole.SERVICE_PROVIDER),
+  ServiceController.getMyServices
+);
+router.patch(
+  '/my-services/:id',
+  auth(UserRole.SERVICE_PROVIDER),
+  validateRequest(ServiceValidation.updateServiceSchemaValidation),
+  ServiceController.updateService
+);
+
+router.delete(
+  '/my-services/:id',
+  auth(UserRole.SERVICE_PROVIDER),
+  ServiceController.deleteService
+);
 
 router.get('/:id', ServiceController.getServiceById);
 

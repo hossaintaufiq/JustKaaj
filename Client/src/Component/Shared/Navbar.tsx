@@ -1,25 +1,57 @@
 "use client";
 import { protectedRoutes } from "@/constants";
 import { useUser } from "@/context/UserContext";
-import { getCurrentUser, logout } from "@/service/Auth";
+import { logout, myProfile } from "@/service/Auth";
+import { TUser } from "@/types";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { MessageSquare } from "lucide-react";
+import NotificationBell from "./NotificationBell";
+import { getUnreadMessagesCount } from "@/service/chat";
 
 export default function Navbar() {
   const { user, setIsLoading } = useUser();
+  const [isBusinessDropdownOpen, setIsBusinessDropdownOpen] = useState(false);
+  const [profileData, setProfileData] = useState<TUser | null>(null);
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isLegalDropdownOpen, setIsLegalDropdownOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const router = useRouter();
 
-  const handleLogOut = () => {
-    logout();
-    setIsLoading(true);
-    getCurrentUser();
-    if (protectedRoutes.some((route) => pathname.match(route))) {
-      router.push("/");
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchData = async () => {
+      try {
+        const res = await myProfile();
+        setProfileData(res.data);
+        const unread = await getUnreadMessagesCount();
+        setUnreadCount(unread?.data || 0);
+      } catch (error) {
+        console.error("Failed to fetch profile:", error);
+      }
+    };
+
+    fetchData();
+  }, [user]);
+
+  const handleLogOut = async () => {
+    try {
+      setIsLoading(true);
+      await logout();
+      router.refresh();
+
+      if (protectedRoutes.some((route) => pathname.match(route))) {
+        router.push("/");
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -28,7 +60,6 @@ export default function Navbar() {
       <nav className="flex items-center justify-between px-4 sm:px-6 py-2.5 bg-white shadow-sm relative z-40">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
-          {/* <img src="/logo.svg" alt="JustKaaj Logo"  /> */}
           <div>
             <h1 className="font-bold text-xl sm:text-2xl lg:text-3xl text-black leading-none">
               Just
@@ -45,57 +76,31 @@ export default function Navbar() {
 
         {/* Desktop Navigation Links */}
         <div className="hidden md:flex space-x-6 text-sm font-medium text-gray-700">
-          <Link
-            href="/"
-            className={
-              pathname === "/" ? "text-green-500" : "hover:text-green-500"
-            }
-          >
-            Home
-          </Link>
-          <Link
-            href="/service"
-            className={
-              pathname === "/service"
-                ? "text-green-500"
-                : "hover:text-green-500"
-            }
-          >
-            Service
-          </Link>
-          <Link
-            href="/blog"
-            className={
-              pathname === "/blog" ? "text-green-500" : "hover:text-green-500"
-            }
-          >
-            Blog
-          </Link>
-          <Link
-            href="/about"
-            className={
-              pathname === "/about" ? "text-green-500" : "hover:text-green-500"
-            }
-          >
-            About us
-          </Link>
+          {[
+            { name: "Home", path: "/" },
+            { name: "Service", path: "/service" },
+            { name: "Blog", path: "/blog" },
+            { name: "About us", path: "/about" },
+            { name: "Contact", path: "/contact" },
+          ].map((link) => (
+            <Link
+              key={link.path}
+              href={link.path}
+              className={
+                pathname === link.path
+                  ? "text-green-500"
+                  : "hover:text-green-500 transition"
+              }
+            >
+              {link.name}
+            </Link>
+          ))}
 
-          <Link
-            href="/contact"
-            className={
-              pathname === "/contact"
-                ? "text-green-500"
-                : "hover:text-green-500"
-            }
-          >
-            Contact
-          </Link>
-
-          {/* Legal Pages Dropdown */}
+          {/* Legal Dropdown */}
           <div className="relative">
             <button
               onClick={() => setIsLegalDropdownOpen(!isLegalDropdownOpen)}
-              className="flex items-center space-x-1 text-gray-700 hover:text-green-500 text-sm font-medium transition-colors"
+              className="flex items-center space-x-1 text-gray-700 hover:text-green-500 transition"
             >
               <span>Legal</span>
               <svg
@@ -116,7 +121,7 @@ export default function Navbar() {
             </button>
 
             {isLegalDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 sm:w-56 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 border border-gray-200 z-50">
                 <Link
                   href="/privacy-policy-terms"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
@@ -127,12 +132,85 @@ export default function Navbar() {
               </div>
             )}
           </div>
+
+          {/* Service Provider Menu */}
+          {user?.role === "SERVICE_PROVIDER" && (
+            <div className="relative">
+              <button
+                onClick={() =>
+                  setIsBusinessDropdownOpen(!isBusinessDropdownOpen)
+                }
+                className="flex items-center space-x-1 text-gray-700 hover:text-green-500 transition"
+              >
+                <span>My Business</span>
+                <svg
+                  className={`w-4 h-4 transition-transform ${
+                    isBusinessDropdownOpen ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+
+              {isBusinessDropdownOpen && (
+                <div className="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50">
+                  <Link
+                    href="/my-services"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                    onClick={() => setIsBusinessDropdownOpen(false)}
+                  >
+                    My Services
+                  </Link>
+                  <Link
+                    href="/service-create"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                    onClick={() => setIsBusinessDropdownOpen(false)}
+                  >
+                    Add Service
+                  </Link>
+                  <Link
+                    href="/service-history"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                    onClick={() => setIsBusinessDropdownOpen(false)}
+                  >
+                    Service History
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
-        {/* Desktop Right Side - Auth and Profile */}
-        <div className="hidden md:flex items-center space-x-3">
+        {/* Right Side - Messages, Notifications, Profile */}
+        <div className="hidden md:flex items-center space-x-4">
+          {user?.email && (
+            <>
+              <Link
+                href="/messages"
+                className={`relative p-2 rounded-full hover:bg-green-50 transition ${
+                  pathname === "/messages" ? "text-green-600" : "text-gray-600"
+                }`}
+              >
+                <MessageSquare className="w-5 h-5" />
+                <span className="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
+                  {unreadCount}
+                </span>
+              </Link>
+
+              {/* Notification Bell */}
+              <NotificationBell />
+            </>
+          )}
+
           {!user?.email ? (
-            // Not Logged In: Show Login & Sign Up
             <>
               <Link
                 href="/login"
@@ -148,20 +226,26 @@ export default function Navbar() {
               </Link>
             </>
           ) : (
-            // Logged In: Show Profile Dropdown
             <div className="relative">
               <button
                 onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                className="flex items-center justify-center w-9 h-9 rounded-full border-2 border-green-600
-             bg-gray-100 text-gray-700 hover:bg-green-100 hover:text-green-600 
-             focus:outline-none focus:ring-2 focus:ring-green-400 
-             transition-all duration-200"
+                className="flex items-center justify-center w-9 h-9 rounded-full border-2 border-green-600 bg-gray-100 text-gray-700 hover:bg-green-100 hover:text-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-200 overflow-hidden"
               >
-                <span className="text-lg">👤</span>
+                {profileData?.profileImage ? (
+                  <Image
+                    width={100}
+                    height={100}
+                    src={profileData.profileImage}
+                    alt="Profile"
+                    className="w-full h-full object-cover rounded-full"
+                  />
+                ) : (
+                  <span className="text-lg">👤</span>
+                )}
               </button>
 
               {isProfileDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 sm:w-56 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 border border-gray-200 z-50">
                   <Link
                     href={`/profile/${user.role.toLowerCase()}`}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
@@ -169,32 +253,6 @@ export default function Navbar() {
                   >
                     Profile
                   </Link>
-                  <button
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
-                    onClick={handleLogOut}
-                  >
-                    Logout
-                  </button>
-
-                  {user?.role === "SERVICE_PROVIDER" && (
-                    <div>
-                      <Link
-                        href="/profile/provider"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
-                        onClick={() => setIsProfileDropdownOpen(false)}
-                      >
-                        My Services
-                      </Link>
-                      <Link
-                        href="/service-create"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
-                        onClick={() => setIsProfileDropdownOpen(false)}
-                      >
-                        Create Service
-                      </Link>
-                    </div>
-                  )}
-
                   {user?.role === "ADMIN" && (
                     <Link
                       href="/admin/dashboard"
@@ -204,6 +262,21 @@ export default function Navbar() {
                       Admin Dashboard
                     </Link>
                   )}
+                  {user?.role === "USER" && (
+                    <Link
+                      href="/my-order"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                      onClick={() => setIsProfileDropdownOpen(false)}
+                    >
+                      My Orders
+                    </Link>
+                  )}
+                  <button
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                    onClick={handleLogOut}
+                  >
+                    Logout
+                  </button>
                 </div>
               )}
             </div>
@@ -212,9 +285,8 @@ export default function Navbar() {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden p-2 z-50"
+          className="md:hidden p-2 z-50 text-gray-800"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label="Toggle mobile menu"
         >
           <svg
             className="w-6 h-6"
@@ -245,63 +317,28 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className="absolute top-full left-0 right-0 bg-white shadow-lg md:hidden z-50 border-t border-gray-200">
           <div className="px-4 py-6 space-y-4">
-            <Link
-              href="/"
-              className={`block text-lg font-medium py-2 ${
-                pathname === "/"
-                  ? "text-green-500"
-                  : "text-gray-700 hover:text-green-500"
-              }`}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Home
-            </Link>
-            <Link
-              href="/service"
-              className={`block text-lg font-medium py-2 ${
-                pathname === "/service"
-                  ? "text-green-500"
-                  : "text-gray-700 hover:text-green-500"
-              }`}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Service
-            </Link>
-            <Link
-              href="/about"
-              className={`block text-lg font-medium py-2 ${
-                pathname === "/about"
-                  ? "text-green-500"
-                  : "text-gray-700 hover:text-green-500"
-              }`}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              About us
-            </Link>
-            <Link
-              href="/blog"
-              className={`block text-lg font-medium py-2 ${
-                pathname === "/blog"
-                  ? "text-green-500"
-                  : "text-gray-700 hover:text-green-500"
-              }`}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Blog
-            </Link>
-            <Link
-              href="/contact"
-              className={`block text-lg font-medium py-2 ${
-                pathname === "/contact"
-                  ? "text-green-500"
-                  : "text-gray-700 hover:text-green-500"
-              }`}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Contact
-            </Link>
+            {[
+              { name: "Home", path: "/" },
+              { name: "Service", path: "/service" },
+              { name: "Blog", path: "/blog" },
+              { name: "About us", path: "/about" },
+              { name: "Contact", path: "/contact" },
+            ].map((link) => (
+              <Link
+                key={link.path}
+                href={link.path}
+                className={`block text-lg font-medium py-2 ${
+                  pathname === link.path
+                    ? "text-green-500"
+                    : "text-gray-700 hover:text-green-500"
+                }`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {link.name}
+              </Link>
+            ))}
 
-            {/* Legal Pages in Mobile Menu */}
+            {/* Legal */}
             <div className="pt-2 border-t border-gray-200">
               <p className="text-sm font-medium text-gray-500 mb-2">Legal</p>
               <Link
@@ -312,100 +349,123 @@ export default function Navbar() {
                 Privacy Policy & Terms of Use
               </Link>
             </div>
+            {user?.role === "SERVICE_PROVIDER" && (
+              <div className="relative">
+                <button
+                  onClick={() =>
+                    setIsBusinessDropdownOpen(!isBusinessDropdownOpen)
+                  }
+                  className="flex items-center space-x-1 text-gray-700 hover:text-green-500 transition"
+                >
+                  <span>My Business</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform ${
+                      isBusinessDropdownOpen ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
 
-            {/* Mobile Auth and Profile Buttons */}
-            <div className="pt-4 border-t border-gray-200 space-y-3">
-              {!user?.email ? (
-                <div>
+                {isBusinessDropdownOpen && (
+                  <div className="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50">
+                    <Link
+                      href="/my-services"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                      onClick={() => setIsBusinessDropdownOpen(false)}
+                    >
+                      My Services
+                    </Link>
+                    <Link
+                      href="/service-create"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                      onClick={() => setIsBusinessDropdownOpen(false)}
+                    >
+                      Add Service
+                    </Link>
+                    <Link
+                      href="/service-history"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                      onClick={() => setIsBusinessDropdownOpen(false)}
+                    >
+                      Service History
+                    </Link>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Messages & Notifications */}
+            {user?.email && (
+              <div className="px-4 py-2 pt-4 border-t border-gray-200 space-y-3">
+                {user?.role === "ADMIN" && (
                   <Link
-                    href="/login"
-                    className="block text-lg font-medium py-2 text-gray-700 hover:text-green-500"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    href="/registration"
-                    className="block text-lg font-medium py-2 text-gray-700 hover:text-green-500"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Sign Up
-                  </Link>
-                </div>
-              ) : (
-                // Mobile Profile Links
-                <div className="pt-2 border-t border-gray-200">
-                  <Link
-                    href={`/profile/${user?.role.toLowerCase()}`}
+                    href="/admin/dashboard"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
                     onClick={() => setIsProfileDropdownOpen(false)}
                   >
-                    Profile
+                    Admin Dashboard
                   </Link>
-                  {user?.role === "SERVICE_PROVIDER" && (
-                    <div>
-                      <Link
-                        href="/profile/provider"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
-                        onClick={() => setIsProfileDropdownOpen(false)}
-                      >
-                        My Services
-                      </Link>
-                      <Link
-                        href="/service-create"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
-                        onClick={() => setIsProfileDropdownOpen(false)}
-                      >
-                        Create Service
-                      </Link>
-                    </div>
-                  )}
-                  {user?.role === "ADMIN" && (
-                    <Link
-                      href="/admin/dashboard"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
-                      onClick={() => setIsProfileDropdownOpen(false)}
-                    >
-                      Admin Dashboard
-                    </Link>
-                  )}
-                  <button
+                )}
+                {user?.role === "USER" && (
+                  <Link
+                    href="/my-order"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
-                    onClick={handleLogOut}
+                    onClick={() => setIsProfileDropdownOpen(false)}
                   >
-                    Logout
-                  </button>
-                  {user?.role === "SERVICE_PROVIDER" && (
-                    <div>
-                      <Link
-                        href="/profile/provider"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
-                        onClick={() => setIsProfileDropdownOpen(false)}
-                      >
-                        My Services
-                      </Link>
-                      <Link
-                        href="/service-create"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
-                        onClick={() => setIsProfileDropdownOpen(false)}
-                      >
-                        Create Service
-                      </Link>
-                    </div>
-                  )}
+                    My Order
+                  </Link>
+                )}
+                <Link
+                  href="/messages"
+                  className={`relative p-2 rounded-full hover:bg-green-50 transition ${
+                    pathname === "/messages"
+                      ? "text-green-600"
+                      : "text-gray-600"
+                  }`}
+                >
+                  <MessageSquare className="w-5 h-5" />
+                  <span className="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
+                    {unreadCount}
+                  </span>
+                </Link>
+                <NotificationBell />
+                <button
+                  className="block w-full text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                  onClick={handleLogOut}
+                >
+                  Logout
+                </button>
+              </div>
+            )}
 
-                  {user?.role === "ADMIN" && (
-                    <Link
-                      href="/admin/dashboard"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
-                      onClick={() => setIsProfileDropdownOpen(false)}
-                    >
-                      Admin Dashboard
-                    </Link>
-                  )}
-                </div>
-              )}
-            </div>
+            {/* Auth Links for mobile */}
+            {!user?.email && (
+              <div className="pt-4 border-t border-gray-200 space-y-3">
+                <Link
+                  href="/login"
+                  className="block text-lg font-medium py-2 text-gray-700 hover:text-green-500"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/registration"
+                  className="block text-lg font-medium py-2 text-gray-700 hover:text-green-500"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}

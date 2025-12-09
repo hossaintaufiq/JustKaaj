@@ -1,26 +1,37 @@
 "use client";
 
 import { myProfile } from "@/service/Auth";
+import { TUser } from "@/types";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const Header = () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [data, setData] = useState<any>(null);
+  const [userData, setData] = useState<TUser | null>(null);
 
   useEffect(() => {
     async function fetchData() {
       const res = await myProfile();
-      setData(res);
+      setData(res.data);
     }
     fetchData();
   }, []);
-  const userData = data?.data;
   // Calculate profile completion (simple: name, email, phone, address)
-  const userFields = ["fullName", "email", "phone", "address"];
+  const userFields: Array<keyof TUser> = [
+    "fullName",
+    "email",
+    "phone",
+    "address",
+  ];
+
   const userCompleted = userData
-    ? userFields.filter(
-        (field) => userData[field] && userData[field].toString().trim() !== ""
-      ).length
+    ? userFields.filter((field) => {
+        const value = userData[field];
+        return (
+          value !== undefined &&
+          value !== null &&
+          value.toString().trim() !== ""
+        );
+      }).length
     : 0;
   const userCompletionPercent = Math.round(
     (userCompleted / userFields.length) * 100
@@ -79,7 +90,17 @@ const Header = () => {
       <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-8 flex flex-col md:flex-row items-center md:justify-between gap-6 md:gap-0">
         <div className="flex flex-col sm:flex-row items-center w-full md:w-auto">
           <div className="w-16 h-16 sm:w-20 sm:h-20 bg-green-100 rounded-full flex items-center justify-center text-2xl sm:text-3xl mb-4 sm:mb-0 sm:mr-6">
-            {userData?.avatar ? userData.avatar : "👤"}
+            {userData?.profileImage ? (
+              <Image
+                width={100}
+                height={100}
+                src={userData.profileImage}
+                alt="Profile"
+                className="w-full h-full object-cover rounded-full"
+              />
+            ) : (
+              <span className="text-lg">👤</span>
+            )}
           </div>
           <div className="text-center sm:text-left">
             <h1 className="text-xl sm:text-2xl font-bold text-gray-900 break-words">

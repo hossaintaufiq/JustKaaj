@@ -1,9 +1,9 @@
 import express from 'express';
 import { UserController } from './user.controller';
 import auth from '../../middlewares/auth';
-import { UserRole } from '../../../../generated/prisma';
 import validateRequest from '../../middlewares/validateRequest';
 import { UserValidation } from './user.validation';
+import { UserRole } from '@prisma/client';
 
 const router = express.Router();
 
@@ -27,6 +27,12 @@ router.get(
   '/getMe',
   auth(UserRole.SERVICE_PROVIDER, UserRole.USER, UserRole.ADMIN),
   UserController.getMe
+);
+router.patch(
+  '/update-profileImg',
+  auth(UserRole.SERVICE_PROVIDER, UserRole.USER, UserRole.ADMIN),
+  validateRequest(UserValidation.updateProfileImg),
+  UserController.updateProfileImg
 );
 
 export const UserRoute = router;

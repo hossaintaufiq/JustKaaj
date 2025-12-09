@@ -24,7 +24,7 @@ const createAdmin: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 const createServicePorvider: RequestHandler = catchAsync(async (req, res) => {
-  const result = await UserService.createServicePorvider(req);
+  const result = await UserService.createServiceProvider(req);
   sendResponse(res, {
     success: true,
     statusCode: status.CREATED,
@@ -43,9 +43,19 @@ const getMe: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
+const updateProfileImg: RequestHandler = catchAsync(async (req, res) => {
+  const result = await UserService.updateProfileImg(req);
+  sendResponse(res, {
+    success: true,
+    statusCode: status.OK,
+    message: 'Profile Image updated successfully',
+    data: result,
+  });
+});
 export const UserController = {
   createUser,
   createAdmin,
   createServicePorvider,
   getMe,
+  updateProfileImg,
 };

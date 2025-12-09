@@ -21,19 +21,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <Providers>
-      <html lang="en">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-green-50 via-white to-green-100 min-h-screen`}
-        >
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-green-50 via-white to-green-100 min-h-screen`}
+      >
+        <Providers>
           <Toaster richColors position="top-center" />
           {children}
-        </body>
-      </html>
-    </Providers>
+        </Providers>
+      </body>
+    </html>
   );
 }

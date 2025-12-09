@@ -1,0 +1,29 @@
+# Node modules
+node_modules/
+
+# Build artifacts
+dist/
+build/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Client-specific (Next.js)
+.next/
+out/
+
+# Server-specific
+generated/prisma/
+dist/
+
+# Optional: VS Code
+.vscode/

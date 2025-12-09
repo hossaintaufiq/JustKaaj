@@ -1,80 +1,44 @@
-"use client";
+"use server";
 
 import { IUser, TRegisterUser, TLoginUser } from "@/types";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 
-<<<<<<< HEAD
 export const RegisterUser = async (userdata: TRegisterUser) => {
-=======
-// Store token in localStorage
-const setToken = (token: string) => {
-  if (typeof window !== 'undefined') {
-    localStorage.setItem("accessToken", token);
-  }
-};
-
-// Get token from localStorage
-const getToken = (): string | null => {
-  if (typeof window !== 'undefined') {
-    return localStorage.getItem("accessToken");
-  }
-  return null;
-};
-
-// Remove token
-const removeToken = () => {
-  if (typeof window !== 'undefined') {
-    localStorage.removeItem("accessToken");
-  }
-};
-
-// ---------------- REGISTER ---------------- 
-export const Register = async (userdata: RegisterUser) => {
->>>>>>> origin/main
   try {
-
-
-    console.log("Attempting registration with data:", userdata);
-    
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/user/create-user`, {
-      method: "POST",
-      headers: { 
-        "Content-Type": "application/json" 
-      },
-      body: JSON.stringify(userdata),
-      credentials: "include",
-    });
-
-    console.log("Registration response status:", res.status);
-    
-    if (!res.ok) {
-      const errorData = await res.json();
-      console.error("Registration failed:", errorData);
-      throw new Error(errorData.message || `HTTP error! status: ${res.status}`);
-    }
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/user/create-user`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userdata),
+      }
+    );
 
     const result = await res.json();
-    console.log("Registration result:", result);
-    
-    if (result.success && result.data?.accessToken) {
-      setToken(result.data.accessToken);
+    if (result.success) {
+      (await cookies()).set("accessToken", result.data.accessToken);
     }
     return result;
   } catch (error) {
     console.error("Error during registration:", error);
-    throw new Error(error instanceof Error ? error.message : "Registration failed");
+    throw new Error("Registration failed");
   }
 };
 export const RegisterProvider = async (userdata: TRegisterUser) => {
   try {
-    const res = await fetch(`http://localhost:5000/api/user/create-provider`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userdata),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/user/create-provider`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userdata),
+      }
+    );
 
     const result = await res.json();
     if (result.success) {
@@ -87,61 +51,34 @@ export const RegisterProvider = async (userdata: TRegisterUser) => {
   }
 };
 
-// ---------------- LOGIN ---------------- 
 export const LoginUser = async (userdata: TLoginUser) => {
   try {
-// <<<<<<< HEAD
-    console.log("Attempting login with data:", userdata);
-    
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/login`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
       method: "POST",
-      headers: { 
-        "Content-Type": "application/json" 
+      headers: {
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(userdata),
-      credentials: "include",
     });
-
-    console.log("Login response status:", res.status);
-    
-    if (!res.ok) {
-      const errorData = await res.json();
-      console.error("Login failed:", errorData);
-      throw new Error(errorData.message || `HTTP error! status: ${res.status}`);
-    }
-
     const result = await res.json();
-    console.log("Login result:", result);
-    
-    if (result.success && result.data?.accessToken) {
-      setToken(result.data.accessToken);
+    if (result.success) {
+      (await cookies()).set("accessToken", result.data.accessToken);
     }
     return result;
   } catch (error) {
     console.error("Error during login:", error);
-    throw new Error(error instanceof Error ? error.message : "Login failed");
+    throw new Error("Login failed");
   }
 };
 
-// ---------------- LOGOUT ---------------- 
-export const logout = () => {
-  removeToken();
+export const logout = async () => {
+  try {
+    (await cookies()).delete("accessToken");
+  } catch (error) {
+    console.error("Error during logout:", error);
+    throw new Error("Logout failed");
+  }
 };
-
-// ---------------- GET CURRENT USER ---------------- 
-// export const getCurrentUser = (): IUser | null => {
-//   const token = getToken();
-//   if (!token) return null;
-//   try {
-//     return jwtDecode<IUser>(token);
-//   } catch {
-
-//     (await cookies()).delete("accessToken");
-//   } catch (error) {
-//     console.error("Error during logout:", error);
-//     throw new Error("Logout failed");
-//   }
-// };
 
 export const getCurrentUser = async (): Promise<IUser | null> => {
   const accessToken = (await cookies()).get("accessToken")?.value;
@@ -155,37 +92,79 @@ export const getCurrentUser = async (): Promise<IUser | null> => {
   }
 };
 
-// ---------------- MY PROFILE ---------------- 
 export const myProfile = async () => {
-  const token = getToken();
-  if (!token) {
+  const accessToken = (await cookies()).get("accessToken")?.value;
+
+  if (!accessToken) {
     throw new Error("Access token is missing");
   }
 
   try {
-    const res = await fetch("http://localhost:5000/api/user/getMe", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/getMe`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: accessToken,
       },
-      credentials: "include",
+      cache: "no-store",
     });
-
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.message || `HTTP error! status: ${res.status}`);
-    }
-
     const result = await res.json();
     return result;
   } catch (error) {
     console.error("Error fetching profile:", error);
-    throw new Error(error instanceof Error ? error.message : "Failed to fetch profile");
+    throw new Error("Failed to fetch profile");
   }
 };
 
-// const res = await fetch("http://localhost:5000/api/user/create-user", { ... });
-// const res = await fetch("http://147.79.68.37:5000/api/auth/login", { ... });
-// const res = await fetch("api/auth/my-profile", { ... });
+//update profileImage;
+export const updateProfileImg = async (url: string) => {
+  const accessToken = (await cookies()).get("accessToken")?.value;
 
+  if (!accessToken) {
+    throw new Error("Access token is missing");
+  }
+
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/user/update-profileImg`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: accessToken,
+        },
+        body: JSON.stringify({ profileImage: url }),
+      }
+    );
+    const result = await res.json();
+    return result;
+  } catch (error) {
+    console.error("Error updating profile Image:", error);
+    throw new Error("Failed to update profile Image");
+  }
+};
+
+export const uploadToCloudinary = async (file: File) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append(
+    "upload_preset",
+    process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!
+  );
+
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Cloudinary upload failed: ${res.status} ${errText}`);
+  }
+
+  const data = await res.json();
+  return data.secure_url;
+};

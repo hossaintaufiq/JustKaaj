@@ -1,19 +1,19 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { myProfile } from "@/service/Auth";
+import { TUser } from "@/types";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const OverView = () => {
-  const [data, setData] = useState<any>(null);
+  const [userData, setData] = useState<TUser | null>(null);
 
   useEffect(() => {
     async function fetchData() {
       const res = await myProfile();
-      setData(res);
+      setData(res.data);
     }
     fetchData();
   }, []);
-  const userData = data?.data;
   const memberSince = userData?.createdAt
     ? new Date(userData.createdAt).toLocaleDateString("en-US", {
         month: "long",
@@ -25,10 +25,20 @@ const OverView = () => {
       <h2 className="text-xl font-semibold text-gray-900 mb-6">
         User Overview
       </h2>
-      <div className="bg-gray-50 rounded-lg shadow p-4 sm:p-6 max-w-2xl">
+      <div className="rounded-lg p-4 sm:p-6 max-w-2xl">
         <div className="flex items-center mb-4">
           <div className="w-16 h-16 sm:w-20 sm:h-20 bg-green-100 rounded-full flex items-center justify-center text-2xl sm:text-3xl mr-4">
-            {userData?.avatar ? userData?.avatar : "👤"}
+            {userData?.profileImage ? (
+              <Image
+                width={100}
+                height={100}
+                src={userData.profileImage}
+                alt="Profile"
+                className="w-full h-full object-cover rounded-full"
+              />
+            ) : (
+              <span className="text-lg">👤</span>
+            )}
           </div>
           <div>
             <h3 className="text-xl sm:text-2xl font-bold text-gray-900">

@@ -1,15 +1,12 @@
-
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
 }
+
 
 
 model Address {
@@ -21,8 +18,11 @@ state String
 postal_code Int
 
 //relation
-user User @relation(fields: [user_id], references: [user_id])
-user_id String @unique
+user User? @relation(fields: [user_id], references: [user_id])
+user_id String? @unique
+
+orderAddress Order? @relation(fields: [order_id], references: [id])
+order_id String? @unique
 }
 
 
@@ -33,7 +33,7 @@ password String
 fullName String
 profileImage String?
 address   Address?
-phone String
+phone String @unique
 agree Boolean @default(false)
 role UserRole @default(USER)
 is_verified Boolean @default(false)
@@ -43,6 +43,10 @@ updatedAt DateTime @updatedAt
 
 service_provider Service_Provider?
 Admin Admin?
+
+orders Order[]
+sentMessages Chat[] @relation("SentMessages")
+receivedMessages Chat[] @relation("ReceivedMessages")
 
 @@map("users")
 }
@@ -64,9 +68,9 @@ model Service_Provider{
   email String @unique
   fullName String
   business_name String
-  business_license Int
-  nid_number Int
-  govt_id_or_tin Int
+  business_license String
+  nid_number String
+  govt_id_or_tin String
   facebook_profile String
   website_link String
   category String
@@ -77,25 +81,41 @@ model Service_Provider{
   //relation
   user User @relation(fields: [email], references: [email])
   providerServices ProviderServices[]
+  orders Order[]
   @@map("service_provider")
 }
-model Service{
-  id String @id @default(ulid())
-  title String
-  description String
-  base_price Float
-  price_unit String
-  estimed_duration String
-  is_featured Boolean @default(false)
-  avg_rating Float @default(0)
-  is_active Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Service {
+  id              String   @id @default(ulid())
+  title           String
+  description     String
+  area            String
+  price           Float
+  is_featured     Boolean  @default(false)
+  avg_rating      Float    @default(0)
+  is_active       Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
+  availabilities  ServiceAvailability[]   
   providerServices ProviderServices[]
-  category Service_Category[]
+  serviceOnCategory ServiceOnCategory[]
+  orders Order[]
+
   @@map("services")
 }
+
+model ServiceAvailability {
+  id         String   @id @default(ulid())
+  day        String
+  startTime  String?
+  endTime    String?
+  isAvailable Boolean  @default(true) 
+
+  service   Service  @relation(fields: [serviceId], references: [id])
+  serviceId String
+}
+
+
 
 model ProviderServices{
   providerId String
@@ -108,19 +128,29 @@ model ProviderServices{
 
   @@map("providerServices")
 }
+model ServiceOnCategory {
+  id          String   @id @default(ulid())
+  serviceId   String
+  categoryId  String
+  createdAt  DateTime @default(now())
+
+  // relations
+  service     Service         @relation(fields: [serviceId], references: [id])
+  category    Service_Category @relation(fields: [categoryId], references: [id])
+
+  @@unique([serviceId, categoryId])  
+  @@map("service_on_category")       
+}
 
 model Service_Category{
   id String @id @default(ulid())
   name String
-  icon String
-  description String
-  is_Active Boolean
+  is_Active Boolean @default(true)
   //relation
   parent_categoryId String
   parent_category Parent_category @relation(fields: [parent_categoryId], references: [id])
 
-  service_id String?
-  service Service? @relation(fields: [service_id], references: [id])
+  serviceOnCategory ServiceOnCategory[]
  
  @@map("service_category")
 }
@@ -128,12 +158,52 @@ model Service_Category{
 model Parent_category{
   id String @id @default(ulid())
   name String
-  icon String
-  description String
-  is_Active Boolean
+  is_Active Boolean @default(true)
   category Service_Category[]
   @@map("parent_category")
 }
+model Order {
+  id          String   @id @default(ulid())
+  serviceId   String
+  service     Service  @relation(fields: [serviceId], references: [id])
+
+  userId      String
+  user        User     @relation( fields: [userId], references: [user_id])
+
+  fullName String
+  address   Address?
+  phone String
+  providerId  String
+  provider    Service_Provider   @relation( fields: [providerId], references: [id])
+
+  status      Order_Status @default(PENDING) 
+  price       Float
+  quantity    Int? 
+
+  scheduledDate String
+  scheduledTime String
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+   @@map("orders")
+}
+
+model Chat {
+  id          String   @id @default(ulid())
+  sender      User     @relation("SentMessages", fields: [senderId], references: [user_id])
+  senderId    String
+
+  receiver    User     @relation("ReceivedMessages", fields: [receiverId], references: [user_id])
+  receiverId  String
+
+  message     String
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+   @@map("chat")
+}
+
+
 
 enum UserRole{
   SUPER_ADMIN
@@ -150,4 +220,12 @@ enum USER_STATUS{
 enum Provider_Status{
   PENDING
   ACTIVE
+}
+enum Order_Status{
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  REJECTED
 }

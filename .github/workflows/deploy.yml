@@ -28,10 +28,10 @@ jobs:
             cd Server
             npm install 
             npm run build 
-            pm2 restart Server || pm2 start dist/server.js --name Server
+            pm2 restart server --update-env || pm2 start dist/server.js --name Server
 
             # Frontend (Next.js SSR)
             cd ../Client
             npm install 
             npm run build
-            pm2 restart Client --update-env || pm2 start npm --name Client -- start
+            pm2 restart client --update-env || pm2 start npm --name Client -- start

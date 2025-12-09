@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useUser } from "@/context/UserContext";
 import { RegisterUser, RegisterProvider } from "@/service/Auth";
 import { TRegisterUser } from "@/types";
 import Link from "next/link";
@@ -8,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 const RegistrationForm = ({ activeTab }: any) => {
+  const { setIsLoading, isLoading } = useUser();
   const {
     register,
     handleSubmit,
@@ -20,6 +22,7 @@ const RegistrationForm = ({ activeTab }: any) => {
 
   const onSubmit = async (data: TRegisterUser) => {
     try {
+      setIsLoading(true);
       let res;
 
       if (activeTab === "provider") {
@@ -34,10 +37,10 @@ const RegistrationForm = ({ activeTab }: any) => {
       }
 
       if (res?.success) {
-        toast.success(res?.message || "Registration successful!");
-        router.push("/");
+        toast.success("Registration successful!");
+        router.push("/login");
       } else {
-        toast.error(res?.message || "Something went wrong. Please try again.");
+        toast.error("Something went wrong. Please try again.");
       }
 
       reset();
@@ -238,11 +241,10 @@ const RegistrationForm = ({ activeTab }: any) => {
                 Business License No.
               </label>
               <input
-                type="number"
+                type="text"
                 placeholder="123456"
                 {...register("provider.business_license", {
                   required: "Business license number is required",
-                  valueAsNumber: true,
                 })}
                 className={`w-full px-4 py-2 rounded-md border text-gray-900 placeholder:text-gray-400 ${
                   errors.provider?.business_license
@@ -257,11 +259,10 @@ const RegistrationForm = ({ activeTab }: any) => {
                 NID Number
               </label>
               <input
-                type="number"
+                type="text"
                 placeholder="1234567890"
                 {...register("provider.nid_number", {
                   required: "NID number is required",
-                  valueAsNumber: true,
                 })}
                 className={`w-full px-4 py-2 rounded-md border text-gray-900 placeholder:text-gray-400 ${
                   errors.provider?.nid_number
@@ -278,11 +279,10 @@ const RegistrationForm = ({ activeTab }: any) => {
                 Govt. ID / TIN
               </label>
               <input
-                type="number"
+                type="text"
                 placeholder="123456789"
                 {...register("provider.govt_id_or_tin", {
                   required: "Govt. ID or TIN is required",
-                  valueAsNumber: true,
                 })}
                 className={`w-full px-4 py-2 rounded-md border text-gray-900 placeholder:text-gray-400 ${
                   errors.provider?.govt_id_or_tin
@@ -364,14 +364,15 @@ const RegistrationForm = ({ activeTab }: any) => {
       {/* Submit */}
       <button
         type="submit"
-        disabled={!watch("agree")}
-        className={`w-full py-2 rounded-md font-medium transition-colors ${
-          watch("agree")
-            ? "bg-green-500 text-white hover:bg-green-600"
-            : "bg-gray-300 text-gray-500 cursor-not-allowed"
-        }`}
+        disabled={isLoading || !watch("agree")}
+        className={`w-full py-2 rounded-md font-medium transition-colors 
+    ${
+      isLoading || !watch("agree")
+        ? "bg-gray-400 cursor-not-allowed"
+        : "bg-green-500 hover:bg-green-600 text-white"
+    }`}
       >
-        Register
+        {isLoading ? "Registering..." : "Register"}
       </button>
     </form>
   );

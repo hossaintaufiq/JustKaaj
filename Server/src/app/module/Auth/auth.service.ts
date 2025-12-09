@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt';
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
-import { PrismaClient, User, USER_STATUS } from '../../../../generated/prisma';
-import config from '../../config';
 
-const prisma = new PrismaClient();
+import config from '../../config';
+import { User, USER_STATUS } from '@prisma/client';
+import { prisma } from '../../utils/prisma';
 
 const userLogin = async (payload: User) => {
   const userData = await prisma.user.findUniqueOrThrow({

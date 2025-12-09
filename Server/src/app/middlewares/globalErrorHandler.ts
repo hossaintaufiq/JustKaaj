@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Prisma } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
-import { Prisma } from '../../../generated/prisma';
 import status from 'http-status';
 
 const globalErrorHandler = (
