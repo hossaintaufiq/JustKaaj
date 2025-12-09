@@ -28,34 +28,41 @@ const bestForYou = [
 
 export default function BestForYouSection() {
   return (
-    <section className="py-12 bg-white">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl sm:text-3xl font-bold text-green-700">Best For You</h2>
+    <section className="py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">
+              Best For You
+            </h2>
+            <p className="text-gray-700 text-sm">Handpicked services tailored to your needs</p>
+          </div>
           <Link
             href="/service"
-            className="flex items-center gap-2 text-green-600 hover:text-green-800 font-medium text-sm px-3 py-2 rounded transition"
+            className="hidden sm:flex items-center gap-2 text-green-700 hover:text-green-800 font-semibold px-4 py-2 rounded-lg hover:bg-green-100 transition"
           >
             View All <FaArrowRight />
           </Link>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-6">
           {bestForYou.map((item, idx) => (
             <Link
               key={idx}
-              href={`/service?name=${encodeURIComponent(item.name)}`} // Pass service name as query
-              className="bg-green-50 rounded-xl shadow hover:shadow-lg transition flex flex-col items-center p-3 cursor-pointer"
+              href={`/service?name=${encodeURIComponent(item.name)}`}
+              className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col items-center p-4 cursor-pointer border-2 border-green-100 hover:border-green-300 group"
             >
-              <div className="w-full aspect-[4/3] relative mb-3">
+              <div className="w-full aspect-square relative mb-4 rounded-xl overflow-hidden bg-gray-50">
                 <Image
                   src={item.img}
                   alt={item.name}
                   fill
-                  className="object-cover rounded-lg"
-                  sizes="(max-width: 768px) 100vw, 20vw"
+                  className="object-cover rounded-xl group-hover:scale-110 transition-transform duration-300"
+                  sizes="(max-width: 768px) 50vw, 20vw"
                 />
               </div>
-              <div className="mt-2 text-center font-bold text-lg text-gray-900">{item.name}</div>
+              <div className="text-center font-semibold text-sm sm:text-base text-gray-900 group-hover:text-green-600 transition-colors line-clamp-2">
+                {item.name}
+              </div>
             </Link>
           ))}
         </div>

@@ -2,11 +2,11 @@ import Image from 'next/image';
 
 export default function HowItWorksSection() {
   return (
-    <section className="py-16 bg-white">
-      <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center gap-10">
+    <section className="py-6">
+      <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center gap-8">
         {/* Left: Video/Image */}
         <div className="flex-1 flex justify-center mb-8 md:mb-0">
-          <div className="relative w-72 h-96 bg-gray-100 rounded-2xl flex items-center justify-center shadow-lg">
+          <div className="relative w-72 h-96 bg-white rounded-2xl flex items-center justify-center shadow-lg border-2 border-green-100">
             <Image
               src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80"
               alt="How it works"
@@ -25,8 +25,8 @@ export default function HowItWorksSection() {
         </div>
         {/* Right: Steps */}
         <div className="flex-1 w-full max-w-xl">
-          <div className="mb-2 text-green-700 font-semibold tracking-widest text-sm">HOW IT WORKS</div>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-8">Easiest way to get a service</h2>
+          <div className="mb-2 text-green-700 font-semibold tracking-widest text-xs">HOW IT WORKS</div>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Easiest way to get a service</h2>
           <ol className="relative border-l-2 border-green-200 ml-6">
             <li className="mb-10 ml-6">
               <span className="absolute -left-7 flex items-center justify-center w-10 h-10 bg-green-500 rounded-full text-white font-bold text-lg">1</span>

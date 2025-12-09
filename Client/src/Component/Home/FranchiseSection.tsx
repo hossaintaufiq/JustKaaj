@@ -85,8 +85,8 @@ export default function FranchiseSection() {
   const next = () => setCurrent((current + 1) % images.length);
 
   return (
-    <section className="py-10 bg-white">
-      <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center gap-10 md:gap-10">
+    <section className="py-6">
+      <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center gap-8">
         {/* Left: Text */}
         <div className="flex-1 min-w-[250px] w-full md:w-auto mb-8 md:mb-0">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-green-700 mb-2 leading-tight text-center md:text-left">
@@ -106,7 +106,7 @@ export default function FranchiseSection() {
         </div>
         {/* Right: Carousel */}
         <div className="flex-1 flex flex-col items-center w-full md:w-auto">
-          <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md aspect-[4/3] rounded-2xl overflow-hidden shadow-lg">
+          <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border-2 border-green-100">
             <img
               src={images[current]}
               alt="Franchise"

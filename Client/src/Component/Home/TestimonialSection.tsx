@@ -56,14 +56,14 @@ const testimonials = [
 
 export default function TestimonialSection() {
   return (
-    <section className="py-16 px-6 bg-white">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+    <section className="py-6 px-6">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         {/* Left Side Content */}
         <div className="max-w-md">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
             Feedback About Their <br /> Experience With Us
           </h2>
-          <p className="text-gray-600 text-sm mb-6">
+          <p className="text-gray-700 text-sm mb-5">
             Read testimonials from our satisfied clients. See how our cleaning
             services have made a difference in their lives and homes
           </p>
@@ -114,7 +114,7 @@ export default function TestimonialSection() {
           >
             {testimonials.map((item, index) => (
               <SwiperSlide key={index}>
-                <div className="bg-white rounded-2xl border-4 border-green-500 p-6 shadow-sm flex flex-col sm:flex-row items-start gap-4">
+                <div className="bg-white rounded-2xl border-2 border-green-300 p-6 shadow-lg flex flex-col sm:flex-row items-start gap-4">
                   <div className="w-24 h-24 relative flex-shrink-0">
                     <Image
                       src={item.image}

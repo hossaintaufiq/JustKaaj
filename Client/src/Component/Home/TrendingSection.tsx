@@ -34,15 +34,18 @@ const trending = [
 
 export default function TrendingSection() {
   return (
-    <section className="py-12 bg-white">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl sm:text-3xl font-bold text-green-700">
-            Trending
-          </h2>
+    <section className="py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">
+              Trending Services
+            </h2>
+            <p className="text-gray-700 text-sm">Most popular services right now</p>
+          </div>
           <Link
             href="/service"
-            className="flex items-center gap-2 text-green-600 hover:text-green-800 font-medium text-sm px-3 py-2 rounded transition"
+            className="hidden sm:flex items-center gap-2 text-green-700 hover:text-green-800 font-semibold px-4 py-2 rounded-lg hover:bg-green-100 transition"
           >
             View All <FaArrowRight />
           </Link>
@@ -50,7 +53,7 @@ export default function TrendingSection() {
 
         <Marquee
           gradient={false}
-          speed={35}
+          speed={40}
           pauseOnHover
           className="overflow-hidden"
         >
@@ -58,19 +61,19 @@ export default function TrendingSection() {
             <Link
               key={idx}
               href={`/service?name=${encodeURIComponent(item.name)}`}
-              className="bg-green-50 rounded-xl shadow hover:shadow-lg transition flex flex-col items-center p-3 cursor-pointer mx-2 min-w-[14rem] sm:min-w-[16rem] flex-shrink-0"
+              className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col items-center p-4 cursor-pointer mx-3 min-w-[16rem] sm:min-w-[18rem] flex-shrink-0 border-2 border-green-100 hover:border-green-300 group"
             >
-              <div className="w-full aspect-[4/3] relative mb-3">
+              <div className="w-full aspect-[4/3] relative mb-4 rounded-xl overflow-hidden">
                 <Image
                   src={`${item.img}&w=300&q=50`}
                   alt={item.name}
                   fill
                   priority={idx < 3}
-                  className="object-cover rounded-lg"
+                  className="object-cover rounded-xl group-hover:scale-105 transition-transform duration-300"
                   sizes="(max-width: 768px) 100vw, 25vw"
                 />
               </div>
-              <div className="mt-2 text-center font-bold text-lg text-gray-900">
+              <div className="text-center font-bold text-lg text-gray-900 group-hover:text-green-600 transition-colors">
                 {item.name}
               </div>
             </Link>
