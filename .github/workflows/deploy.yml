@@ -1,29 +1,30 @@
-name: Auto Deploy to VPS
+# name: Auto Deploy to VPS
 
-on:
-  push:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+#     steps:
+#       - name: Checkout Code
+#         uses: actions/checkout@v3
 
-      - name: Deploy to VPS
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            cd /var/www/justkaaj
-            git fetch origin main
-            git reset --hard origin/main
+#       - name: Deploy to VPS
+#         uses: appleboy/ssh-action@v1.0.3
+#         with:
+#           host: ${{ secrets.VPS_HOST }}
+#           username: ${{ secrets.VPS_USER }}
+#           key: ${{ secrets.VPS_SSH_KEY }}
+#           script: |
+#             cd /var/www/justkaaj
+#             git fetch origin main
+#             git reset --hard origin/main
 
+<<<<<<< HEAD
             # Backend
             cd Server
             npm install 
@@ -35,3 +36,16 @@ jobs:
             npm install 
             npm run build
             pm2 restart client --update-env || pm2 start npm --name Client -- start
+=======
+#             # Backend
+#             cd Server
+#             npm install 
+#             npm run build 
+#             pm2 restart Server || pm2 start dist/server.js --name Server
+
+#             # Frontend (Next.js SSR)
+#             cd ../Client
+#             npm install 
+#             npm run build
+#             pm2 restart Client --update-env || pm2 start npm --name Client -- start
+>>>>>>> 5a11f6c576de889f5a0539a00e696715edfef94e
