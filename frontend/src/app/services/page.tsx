@@ -101,42 +101,17 @@ export default function ServicesPage() {
           ? `${API_URL}/api/providers/list`
           : `${API_URL}/api/providers/list/${selectedCategory}`;
 
-      console.log('Fetching providers from:', url); // Debug log
-
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'omit',
-      });
+      const response = await fetch(url);
+      const data = await response.json();
 
       if (!response.ok) {
-        const errorText = await response.text();
-        let errorData;
-        try {
-          errorData = JSON.parse(errorText);
-        } catch {
-          errorData = { message: errorText || `HTTP ${response.status}: ${response.statusText}` };
-        }
-        console.error('API Error Response:', response.status, errorData);
-        throw new Error(errorData.message || `Failed to fetch providers: ${response.status} ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      console.log('Providers fetched:', data.providers?.length || 0); // Debug log
-
-      if (!data.success && !data.providers) {
-        throw new Error(data.message || 'Invalid response from server');
+        throw new Error(data.message || 'Failed to fetch providers');
       }
 
       setProviders(data.providers || []);
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load services';
-      console.error('Error fetching providers:', err);
       setError(errorMessage);
-      // Set empty array on error to prevent showing stale data
-      setProviders([]);
     } finally {
       setLoading(false);
     }

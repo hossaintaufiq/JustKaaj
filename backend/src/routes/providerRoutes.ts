@@ -304,10 +304,6 @@ router.get('/applications/me', verifyToken, async (req: Request, res: Response) 
 // Get all providers (public, for service listing)
 router.get('/list', async (req: Request, res: Response) => {
   try {
-    console.log('GET /api/providers/list - Request received');
-    console.log('Request origin:', req.headers.origin);
-    console.log('Request headers:', req.headers);
-    
     const { category } = req.query;
 
     const query: any = { isActive: true };
@@ -319,8 +315,6 @@ router.get('/list', async (req: Request, res: Response) => {
       .sort({ approvedAt: -1 })
       .select('-__v -applicationId');
 
-    console.log(`Found ${providers.length} active providers`);
-
     res.json({
       success: true,
       providers,
@@ -330,7 +324,6 @@ router.get('/list', async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: 'Failed to fetch providers',
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
     });
   }
 });
@@ -339,7 +332,6 @@ router.get('/list', async (req: Request, res: Response) => {
 router.get('/list/:category', async (req: Request, res: Response) => {
   try {
     const { category } = req.params;
-    console.log(`GET /api/providers/list/${category} - Request received`);
 
     const providers = await Provider.find({
       serviceCategory: category,
@@ -347,8 +339,6 @@ router.get('/list/:category', async (req: Request, res: Response) => {
     })
       .sort({ approvedAt: -1 })
       .select('-__v -applicationId');
-
-    console.log(`Found ${providers.length} providers for category: ${category}`);
 
     res.json({
       success: true,
@@ -359,7 +349,6 @@ router.get('/list/:category', async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: 'Failed to fetch providers',
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
     });
   }
 });

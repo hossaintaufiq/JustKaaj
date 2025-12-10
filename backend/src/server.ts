@@ -13,28 +13,11 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Request logging middleware (for debugging)
+// CORS middleware (for development)
 app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
-  console.log('Origin:', req.headers.origin);
-  next();
-});
-
-// CORS middleware - Allow all origins in development, specific origins in production
-app.use((req, res, next) => {
-  const allowedOrigins = process.env.ALLOWED_ORIGINS
-    ? process.env.ALLOWED_ORIGINS.split(',')
-    : ['*'];
-  
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes('*') || (origin && allowedOrigins.includes(origin))) {
-    res.header('Access-Control-Allow-Origin', origin || '*');
-  }
-  
+  res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  
   if (req.method === 'OPTIONS') {
     res.sendStatus(200);
   } else {
@@ -80,6 +63,6 @@ app.use('/api/bookings', bookingRoutes);
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on http://localhost:${PORT}`);
   console.log(`📋 Admin login endpoint: http://localhost:${PORT}/api/admin/login`);
-  // console.log(`🔐 Admin credentials: justkaaj25@gmail.com / justkaaj@2025`);
+  console.log(`🔐 Admin credentials: justkaaj25@gmail.com / justkaaj@2025`);
 });
 
