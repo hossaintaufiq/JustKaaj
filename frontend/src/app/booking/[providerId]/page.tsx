@@ -45,6 +45,8 @@ export default function BookingPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const [formData, setFormData] = useState({
     bookingDate: '',
@@ -78,8 +80,10 @@ export default function BookingPage() {
       if (response.ok) {
         const data = await response.json();
         if (data.isProvider) {
-          alert('Providers cannot book services. Please use a customer account.');
-          router.push('/services');
+          setError('Providers cannot book services. Please use a customer account.');
+          setTimeout(() => {
+            router.push('/services');
+          }, 2000);
           return;
         }
       }
@@ -184,9 +188,22 @@ export default function BookingPage() {
         throw new Error(errorMsg);
       }
 
-      // Success - redirect to bookings page or show success message
-      alert('Booking request submitted successfully! The provider will be notified.');
-      router.push('/my-bookings');
+      // Success - show professional success message
+      setSuccess(true);
+      setSuccessMessage('Booking request submitted successfully! The provider will be notified.');
+      setError('');
+      
+      // Clear form
+      setFormData({
+        bookingDate: '',
+        timeSlot: '',
+        notes: '',
+      });
+
+      // Redirect to bookings page after 2 seconds
+      setTimeout(() => {
+        router.push('/my-bookings');
+      }, 2000);
     } catch (err: unknown) {
       console.error('Booking submission error:', err);
       let errorMessage = 'Failed to create booking';
@@ -199,7 +216,7 @@ export default function BookingPage() {
       
       console.error('Setting error:', errorMessage);
       setError(errorMessage);
-      alert(`Error: ${errorMessage}`);
+      setSuccess(false);
     } finally {
       setSubmitting(false);
     }
@@ -323,9 +340,40 @@ export default function BookingPage() {
 
               {/* Booking Form */}
               <form onSubmit={handleSubmit}>
+                {success && (
+                  <div className="mb-6 p-4 bg-green-50 border-l-4 border-green-500 rounded-lg shadow-sm">
+                    <div className="flex items-start">
+                      <div className="flex-shrink-0">
+                        <svg className="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <div className="ml-3 flex-1">
+                        <h3 className="text-sm font-medium text-green-800">Booking Request Submitted!</h3>
+                        <div className="mt-2 text-sm text-green-700">
+                          <p>{successMessage}</p>
+                          <p className="mt-1 text-xs text-green-600">Redirecting to your bookings...</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {error && (
-                  <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
-                    {error}
+                  <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-lg shadow-sm">
+                    <div className="flex items-start">
+                      <div className="flex-shrink-0">
+                        <svg className="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <div className="ml-3">
+                        <h3 className="text-sm font-medium text-red-800">Error</h3>
+                        <div className="mt-2 text-sm text-red-700">
+                          <p>{error}</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
 

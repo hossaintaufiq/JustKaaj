@@ -81,11 +81,12 @@ export default function ProviderBookingsPage() {
   };
 
   const handleAccept = async (bookingId: string) => {
-    if (!confirm('Are you sure you want to accept this booking?')) return;
-
     try {
       const token = await getIdToken();
-      if (!token) return;
+      if (!token) {
+        setError('Authentication required');
+        return;
+      }
 
       const response = await fetch(`${API_URL}/api/bookings/${bookingId}/accept`, {
         method: 'PUT',
@@ -100,21 +101,32 @@ export default function ProviderBookingsPage() {
         throw new Error(data.message || 'Failed to accept booking');
       }
 
-      alert('Booking accepted! The customer has been notified.');
+      setSuccessMessage('Booking accepted successfully! The customer has been notified.');
+      setShowSuccess(true);
+      setError('');
       fetchBookings(); // Refresh list
+      
+      // Hide success message after 3 seconds
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 3000);
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to accept booking';
-      alert(errorMessage);
+      setError(errorMessage);
+      setShowSuccess(false);
     }
   };
 
   const handleReject = async (bookingId: string) => {
-    const rejectionReason = prompt('Please provide a reason for rejection (optional):');
+    const rejectionReason = window.prompt('Please provide a reason for rejection (optional):');
     if (rejectionReason === null) return; // User cancelled
 
     try {
       const token = await getIdToken();
-      if (!token) return;
+      if (!token) {
+        setError('Authentication required');
+        return;
+      }
 
       const response = await fetch(`${API_URL}/api/bookings/${bookingId}/reject`, {
         method: 'PUT',
@@ -131,11 +143,19 @@ export default function ProviderBookingsPage() {
         throw new Error(data.message || 'Failed to reject booking');
       }
 
-      alert('Booking rejected. The customer has been notified.');
+      setSuccessMessage('Booking rejected. The customer has been notified.');
+      setShowSuccess(true);
+      setError('');
       fetchBookings(); // Refresh list
+      
+      // Hide success message after 3 seconds
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 3000);
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to reject booking';
-      alert(errorMessage);
+      setError(errorMessage);
+      setShowSuccess(false);
     }
   };
 

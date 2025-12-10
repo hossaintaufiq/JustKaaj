@@ -65,6 +65,7 @@ export default function ServicesPage() {
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
+  const [notification, setNotification] = useState<{ type: 'error' | 'info'; message: string } | null>(null);
 
   useEffect(() => {
     fetchProviders();
@@ -144,7 +145,11 @@ export default function ServicesPage() {
         if (response.ok) {
           const data = await response.json();
           if (data.isProvider) {
-            alert('Providers cannot book services. Please use a customer account.');
+            setNotification({
+              type: 'info',
+              message: 'Providers cannot book services. Please use a customer account.',
+            });
+            setTimeout(() => setNotification(null), 5000);
             return;
           }
         }
