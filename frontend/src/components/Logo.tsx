@@ -8,7 +8,7 @@ export default function Logo({ variant = 'dark' }: LogoProps) {
   const isLight = variant === 'light';
   
   return (
-    <Link href="#home" className="flex items-center group">
+    <Link href="/" className="flex items-center group">
       <div className="flex items-baseline gap-1">
         <span className={`text-xl sm:text-2xl md:text-3xl font-bold ${isLight ? 'text-green-400' : 'text-green-500'}`}>
           Just

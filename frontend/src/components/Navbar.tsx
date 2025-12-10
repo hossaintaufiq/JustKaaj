@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState, useEffect, useRef } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface NavbarProps {
   onLinkClick?: () => void;
@@ -10,7 +11,31 @@ interface NavbarProps {
 
 export default function Navbar({ onLinkClick }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, signOut, loading } = useAuth();
+  const profileMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close profile menu on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+
+    if (isProfileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isProfileMenuOpen]);
 
   const handleLinkClick = () => {
     setIsMenuOpen(false);
@@ -39,12 +64,38 @@ export default function Navbar({ onLinkClick }: NavbarProps) {
     };
   }, [isMenuOpen]);
 
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      router.push('/');
+      setIsProfileMenuOpen(false);
+    } catch (error) {
+      console.error('Sign out error:', error);
+    }
+  };
+
+  const getUserInitials = () => {
+    if (user?.displayName) {
+      return user.displayName
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2);
+    }
+    return user?.email?.[0].toUpperCase() || 'U';
+  };
+
   const navLinks = [
     { href: '/', label: 'Home' },
     { href: '/services', label: 'All Services' },
     { href: '/become-provider', label: 'Become a Provider' },
-    { href: '/signin', label: 'Sign In' },
-    { href: '/join', label: 'Join' },
+    ...(user
+      ? []
+      : [
+          { href: '/signin', label: 'Sign In' },
+          { href: '/join', label: 'Join' },
+        ]),
   ];
 
   const isActive = (href: string) => {
@@ -77,6 +128,78 @@ export default function Navbar({ onLinkClick }: NavbarProps) {
             </Link>
           );
         })}
+
+        {/* User Profile Avatar - Desktop */}
+        {!loading && user && (
+          <div className="relative" ref={profileMenuRef}>
+            <button
+              onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-green-500 text-white font-semibold hover:bg-green-600 transition-colors focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
+            >
+              {user.photoURL ? (
+                <img
+                  src={user.photoURL}
+                  alt={user.displayName || user.email || 'User'}
+                  className="w-full h-full rounded-full object-cover"
+                />
+              ) : (
+                <span className="text-lg">{getUserInitials()}</span>
+              )}
+            </button>
+
+            {/* Profile Dropdown Menu */}
+            {isProfileMenuOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                <Link
+                  href="/profile"
+                  onClick={() => {
+                    setIsProfileMenuOpen(false);
+                    onLinkClick?.();
+                  }}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  <div className="flex items-center">
+                    <svg
+                      className="w-4 h-4 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
+                    </svg>
+                    My Profile
+                  </div>
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                >
+                  <div className="flex items-center">
+                    <svg
+                      className="w-4 h-4 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                      />
+                    </svg>
+                    Sign Out
+                  </div>
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </nav>
 
       {/* Mobile Menu Button */}
@@ -128,6 +251,60 @@ export default function Navbar({ onLinkClick }: NavbarProps) {
                     </Link>
                   );
                 })}
+
+                {/* User Profile - Mobile */}
+                {!loading && user && (
+                  <>
+                    <Link
+                      href="/profile"
+                      className={`px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 ${
+                        isActive('/profile')
+                          ? 'bg-green-50 text-green-500 border-l-4 border-green-500'
+                          : 'text-gray-700 hover:bg-gray-50 hover:text-green-400'
+                      }`}
+                      onClick={handleLinkClick}
+                    >
+                      <div className="flex items-center">
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-500 text-white font-semibold mr-3">
+                          {user.photoURL ? (
+                            <img
+                              src={user.photoURL}
+                              alt={user.displayName || user.email || 'User'}
+                              className="w-full h-full rounded-full object-cover"
+                            />
+                          ) : (
+                            <span className="text-sm">{getUserInitials()}</span>
+                          )}
+                        </div>
+                        My Profile
+                      </div>
+                    </Link>
+                    <button
+                      onClick={async () => {
+                        await handleSignOut();
+                        handleLinkClick();
+                      }}
+                      className="w-full text-left px-4 py-3 rounded-lg text-base font-medium text-red-600 hover:bg-red-50 transition-all duration-200"
+                    >
+                      <div className="flex items-center">
+                        <svg
+                          className="w-5 h-5 mr-3"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                          />
+                        </svg>
+                        Sign Out
+                      </div>
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </nav>

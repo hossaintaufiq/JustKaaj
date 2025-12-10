@@ -1,6 +1,21 @@
+'use client';
+
 import Image from 'next/image';
+import { useState, useEffect } from 'react';
 
 export default function Hero() {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      // Hide search bar when scrolled past 100px
+      setIsScrolled(scrollPosition > 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   const categories = [
     { label: 'Plumbing', href: '#services' },
     { label: 'Painting', href: '#services' },
@@ -52,25 +67,27 @@ export default function Hero() {
             will take it from here
           </h1>
 
-          {/* Search Bar */}
-          <div className="flex flex-col sm:flex-row gap-3 mb-6 md:mb-8 max-w-lg">
-            <div className="flex-1 relative">
-              <input
-                type="text"
-                placeholder="Search for any service..."
-                className="w-full px-5 sm:px-6 py-4 sm:py-5 rounded-xl text-gray-900 text-base sm:text-lg bg-white shadow-xl border-2 border-white/20 focus:outline-none focus:ring-4 focus:ring-green-400/30 focus:border-green-400/40 transition-all"
-              />
-              <svg className="absolute right-5 sm:right-6 top-1/2 transform -translate-y-1/2 w-6 h-6 text-gray-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
+          {/* Search Bar - Hidden when scrolled */}
+          {!isScrolled && (
+            <div className="flex flex-col sm:flex-row gap-3 mb-6 md:mb-8 max-w-lg transition-opacity duration-300">
+              <div className="flex-1 relative">
+                <input
+                  type="text"
+                  placeholder="Search for any service..."
+                  className="w-full px-5 sm:px-6 py-4 sm:py-5 rounded-xl text-gray-900 text-base sm:text-lg bg-white shadow-xl border-2 border-white/20 focus:outline-none focus:ring-4 focus:ring-green-400/30 focus:border-green-400/40 transition-all"
+                />
+                <svg className="absolute right-5 sm:right-6 top-1/2 transform -translate-y-1/2 w-6 h-6 text-gray-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <button className="bg-green-400 hover:bg-green-500 text-white px-6 py-4 sm:py-5 rounded-xl transition-colors flex items-center justify-center gap-2 min-w-[120px] font-semibold shadow-lg hover:shadow-xl">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <span className="hidden sm:inline">Search</span>
+              </button>
             </div>
-            <button className="bg-green-400 hover:bg-green-500 text-white px-6 py-4 sm:py-5 rounded-xl transition-colors flex items-center justify-center gap-2 min-w-[120px] font-semibold shadow-lg hover:shadow-xl">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <span className="hidden sm:inline">Search</span>
-            </button>
-          </div>
+          )}
 
           {/* Category Buttons */}
           <div className="flex flex-wrap gap-2 sm:gap-3 mb-8 sm:mb-12 md:mb-16 max-w-2xl">
