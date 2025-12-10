@@ -109,14 +109,11 @@ BookingSchema.index({ userId: 1, status: 1 });
 BookingSchema.index({ providerId: 1, status: 1 });
 
 // Generate unique booking ID before saving (fallback if not provided)
-BookingSchema.pre('save', function (next) {
+BookingSchema.pre('save', async function (this: IBooking) {
   if (!this.bookingId) {
     const timestamp = Date.now().toString(36);
     const random = Math.random().toString(36).substring(2, 8);
     this.bookingId = `BK${timestamp}${random}`.toUpperCase();
-  }
-  if (typeof next === 'function') {
-    next();
   }
 });
 
