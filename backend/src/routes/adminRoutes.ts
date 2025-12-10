@@ -182,7 +182,61 @@ router.post('/applications/:id/approve', verifyAdminToken, async (req: Request, 
     application.reviewedAt = new Date();
     await application.save();
 
-    // Create provider entry
+    // Check if provider already exists (shouldn't happen, but handle it)
+    const existingProvider = await Provider.findOne({ userId: application.userId });
+    if (existingProvider) {
+      // Update existing provider instead of creating new one
+      existingProvider.businessName = application.businessName;
+      existingProvider.serviceCategory = application.serviceCategory;
+      existingProvider.yearsOfExperience = application.yearsOfExperience;
+      existingProvider.phoneNumber = application.phoneNumber;
+      existingProvider.address = application.address;
+      existingProvider.city = application.city;
+      existingProvider.state = application.state;
+      existingProvider.zipCode = application.zipCode;
+      existingProvider.businessLicense = application.businessLicense;
+      existingProvider.insuranceProvider = application.insuranceProvider;
+      existingProvider.insurancePolicyNumber = application.insurancePolicyNumber;
+      existingProvider.portfolioWebsite = application.portfolioWebsite;
+      existingProvider.businessDescription = (application as any).businessDescription;
+      existingProvider.hourlyRate = (application as any).hourlyRate;
+      existingProvider.availability = (application as any).availability;
+      existingProvider.serviceAreas = (application as any).serviceAreas || [];
+      existingProvider.certifications = (application as any).certifications || [];
+      existingProvider.specialties = (application as any).specialties || [];
+      existingProvider.facebookUrl = (application as any).facebookUrl;
+      existingProvider.instagramUrl = (application as any).instagramUrl;
+      existingProvider.linkedinUrl = (application as any).linkedinUrl;
+      existingProvider.twitterUrl = (application as any).twitterUrl;
+      existingProvider.applicationId = application._id;
+      existingProvider.isActive = true;
+      existingProvider.approvedAt = new Date();
+      existingProvider.approvedBy = adminEmail;
+      await existingProvider.save();
+      
+      // Create notification for applicant
+      const notification = new Notification({
+        userId: application.userId,
+        type: 'application_approved',
+        title: 'Application Approved!',
+        message: `Congratulations! Your provider application for ${application.businessName} has been approved. You can now start receiving bookings.`,
+        applicationId: application._id,
+        isRead: false,
+      });
+      await notification.save();
+
+      return res.json({
+        success: true,
+        message: 'Application approved successfully (provider updated)',
+        application,
+        provider: {
+          id: existingProvider._id,
+          businessName: existingProvider.businessName,
+        },
+      });
+    }
+
+    // Create new provider entry (user becomes a provider)
     const provider = new Provider({
       userId: application.userId,
       userEmail: application.userEmail,
@@ -199,8 +253,18 @@ router.post('/applications/:id/approve', verifyAdminToken, async (req: Request, 
       insuranceProvider: application.insuranceProvider,
       insurancePolicyNumber: application.insurancePolicyNumber,
       portfolioWebsite: application.portfolioWebsite,
+      businessDescription: (application as any).businessDescription || undefined,
+      hourlyRate: (application as any).hourlyRate || undefined,
+      availability: (application as any).availability || undefined,
+      serviceAreas: (application as any).serviceAreas || [],
+      certifications: (application as any).certifications || [],
+      specialties: (application as any).specialties || [],
+      facebookUrl: (application as any).facebookUrl || undefined,
+      instagramUrl: (application as any).instagramUrl || undefined,
+      linkedinUrl: (application as any).linkedinUrl || undefined,
+      twitterUrl: (application as any).twitterUrl || undefined,
       applicationId: application._id,
-      isActive: true,
+      isActive: true, // User becomes an active provider
       approvedAt: new Date(),
       approvedBy: adminEmail,
     });
@@ -263,6 +327,13 @@ router.post('/applications/:id/reject', verifyAdminToken, async (req: Request, r
     application.status = 'rejected';
     application.reviewedAt = new Date();
     await application.save();
+
+    // If user was previously a provider, deactivate them (they become normal user again)
+    const existingProvider = await Provider.findOne({ userId: application.userId });
+    if (existingProvider) {
+      existingProvider.isActive = false;
+      await existingProvider.save();
+    }
 
     // Create notification for applicant
     const notification = new Notification({

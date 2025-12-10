@@ -1,15 +1,62 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/contexts/AuthContext';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
 export default function ProfilePage() {
-  const { user, signOut, loading } = useAuth();
+  const { user, signOut, loading, getIdToken } = useAuth();
   const router = useRouter();
   const [isSigningOut, setIsSigningOut] = useState(false);
+  const [isProvider, setIsProvider] = useState<boolean | null>(null);
+  const [checkingProvider, setCheckingProvider] = useState(false);
+  const hasCheckedRef = useRef(false);
+
+  // Check if user is a provider
+  useEffect(() => {
+    const checkProviderStatus = async () => {
+      if (!user) {
+        setIsProvider(false);
+        setCheckingProvider(false);
+        hasCheckedRef.current = false;
+        return;
+      }
+
+      // Only check once per user session
+      if (hasCheckedRef.current || checkingProvider) return;
+
+      hasCheckedRef.current = true;
+      setCheckingProvider(true);
+      try {
+        const token = await getIdToken();
+        if (!token) {
+          setIsProvider(false);
+          setCheckingProvider(false);
+          return;
+        }
+
+        const response = await fetch(`${API_URL}/api/providers/check`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+        setIsProvider(data.isProvider || false);
+      } catch (error) {
+        console.error('Error checking provider status:', error);
+        setIsProvider(false);
+      } finally {
+        setCheckingProvider(false);
+      }
+    };
+
+    checkProviderStatus();
+  }, [user, getIdToken]);
 
   const handleSignOut = async () => {
     setIsSigningOut(true);
@@ -87,18 +134,49 @@ export default function ProfilePage() {
                     {getUserName()}
                   </h1>
                   <p className="text-white/90 text-sm sm:text-base mb-4">{user.email}</p>
-                  {user.emailVerified && (
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/20 text-white border border-white/30">
-                      <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      Verified
-                    </span>
-                  )}
+                  <div className="flex flex-wrap items-center gap-2">
+                    {user.emailVerified && (
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/20 text-white border border-white/30">
+                        <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        Verified
+                      </span>
+                    )}
+                    {!checkingProvider && (
+                      <span
+                        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${
+                          isProvider
+                            ? 'bg-blue-500/20 text-white border-blue-300/30'
+                            : 'bg-white/20 text-white border-white/30'
+                        }`}
+                      >
+                        {isProvider ? (
+                          <>
+                            <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                            </svg>
+                            Provider
+                          </>
+                        ) : (
+                          <>
+                            <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                              <path
+                                fillRule="evenodd"
+                                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                            Normal User
+                          </>
+                        )}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

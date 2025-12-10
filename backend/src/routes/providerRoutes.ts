@@ -133,6 +133,146 @@ router.post('/applications', verifyToken, async (req: Request, res: Response) =>
   }
 });
 
+// Check if user is a provider
+router.get('/check', verifyToken, async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.uid;
+
+    const provider = await Provider.findOne({ userId, isActive: true });
+
+    res.json({
+      success: true,
+      isProvider: !!provider,
+      provider: provider || null,
+    });
+  } catch (error: any) {
+    console.error('Error checking provider status:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to check provider status',
+    });
+  }
+});
+
+// Get provider dashboard data
+router.get('/dashboard', verifyToken, async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.uid;
+
+    const provider = await Provider.findOne({ userId, isActive: true });
+
+    if (!provider) {
+      return res.status(403).json({
+        success: false,
+        message: 'You are not an approved provider',
+      });
+    }
+
+    res.json({
+      success: true,
+      provider,
+    });
+  } catch (error: any) {
+    console.error('Error fetching provider dashboard:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch dashboard data',
+    });
+  }
+});
+
+// Update provider profile
+router.put('/dashboard', verifyToken, async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.uid;
+
+    const provider = await Provider.findOne({ userId, isActive: true });
+
+    if (!provider) {
+      return res.status(403).json({
+        success: false,
+        message: 'You are not an approved provider',
+      });
+    }
+
+    const {
+      businessName,
+      serviceCategory,
+      yearsOfExperience,
+      phoneNumber,
+      address,
+      city,
+      state,
+      zipCode,
+      businessLicense,
+      insuranceProvider,
+      insurancePolicyNumber,
+      portfolioWebsite,
+      businessDescription,
+      hourlyRate,
+      availability,
+      serviceAreas,
+      certifications,
+      specialties,
+      facebookUrl,
+      instagramUrl,
+      linkedinUrl,
+      twitterUrl,
+    } = req.body;
+
+    // Update provider fields
+    if (businessName) provider.businessName = businessName;
+    if (serviceCategory) provider.serviceCategory = serviceCategory;
+    if (yearsOfExperience !== undefined) provider.yearsOfExperience = parseInt(yearsOfExperience);
+    if (phoneNumber) provider.phoneNumber = phoneNumber;
+    if (address) provider.address = address;
+    if (city) provider.city = city;
+    if (state) provider.state = state;
+    if (zipCode) provider.zipCode = zipCode;
+    if (businessLicense) provider.businessLicense = businessLicense;
+    if (insuranceProvider) provider.insuranceProvider = insuranceProvider;
+    if (insurancePolicyNumber) provider.insurancePolicyNumber = insurancePolicyNumber;
+    if (portfolioWebsite !== undefined) provider.portfolioWebsite = portfolioWebsite || undefined;
+    if (businessDescription !== undefined) provider.businessDescription = businessDescription || undefined;
+    if (hourlyRate !== undefined) provider.hourlyRate = hourlyRate ? parseFloat(hourlyRate) : undefined;
+    if (availability !== undefined) provider.availability = availability || undefined;
+    if (serviceAreas !== undefined) {
+      provider.serviceAreas = Array.isArray(serviceAreas) 
+        ? serviceAreas 
+        : serviceAreas.split(',').map((area: string) => area.trim()).filter(Boolean);
+    }
+    if (certifications !== undefined) {
+      provider.certifications = Array.isArray(certifications)
+        ? certifications
+        : certifications.split(',').map((cert: string) => cert.trim()).filter(Boolean);
+    }
+    if (specialties !== undefined) {
+      provider.specialties = Array.isArray(specialties)
+        ? specialties
+        : specialties.split(',').map((spec: string) => spec.trim()).filter(Boolean);
+    }
+    if (facebookUrl !== undefined) provider.facebookUrl = facebookUrl || undefined;
+    if (instagramUrl !== undefined) provider.instagramUrl = instagramUrl || undefined;
+    if (linkedinUrl !== undefined) provider.linkedinUrl = linkedinUrl || undefined;
+    if (twitterUrl !== undefined) provider.twitterUrl = twitterUrl || undefined;
+
+    await provider.save();
+
+    res.json({
+      success: true,
+      message: 'Profile updated successfully',
+      provider,
+    });
+  } catch (error: any) {
+    console.error('Error updating provider profile:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update profile',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+    });
+  }
+});
+
 // Get user's application status
 router.get('/applications/me', verifyToken, async (req: Request, res: Response) => {
   try {

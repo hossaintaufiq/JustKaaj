@@ -25,6 +25,20 @@ export interface IProvider extends Document {
   // Portfolio
   portfolioWebsite?: string;
   
+  // Business Details
+  businessDescription?: string;
+  hourlyRate?: number;
+  availability?: string;
+  serviceAreas?: string[];
+  certifications?: string[];
+  specialties?: string[];
+  
+  // Social Media & Links
+  facebookUrl?: string;
+  instagramUrl?: string;
+  linkedinUrl?: string;
+  twitterUrl?: string;
+  
   // Application ID reference
   applicationId: mongoose.Types.ObjectId;
   
@@ -117,6 +131,43 @@ const ProviderSchema = new Schema<IProvider>(
     
     // Portfolio
     portfolioWebsite: {
+      type: String,
+    },
+    
+    // Business Details
+    businessDescription: {
+      type: String,
+    },
+    hourlyRate: {
+      type: Number,
+    },
+    availability: {
+      type: String,
+    },
+    serviceAreas: {
+      type: [String],
+      default: [],
+    },
+    certifications: {
+      type: [String],
+      default: [],
+    },
+    specialties: {
+      type: [String],
+      default: [],
+    },
+    
+    // Social Media & Links
+    facebookUrl: {
+      type: String,
+    },
+    instagramUrl: {
+      type: String,
+    },
+    linkedinUrl: {
+      type: String,
+    },
+    twitterUrl: {
       type: String,
     },
     
