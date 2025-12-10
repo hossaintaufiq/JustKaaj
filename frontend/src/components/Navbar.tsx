@@ -26,11 +26,59 @@ export default function Navbar({ onLinkClick }: NavbarProps) {
   const [isNotificationMenuOpen, setIsNotificationMenuOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [isProvider, setIsProvider] = useState<boolean | null>(null);
+  const [checkingProvider, setCheckingProvider] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const { user, signOut, loading, getIdToken } = useAuth();
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const notificationMenuRef = useRef<HTMLDivElement>(null);
+  const hasCheckedProviderRef = useRef(false);
+
+  // Check if user is a provider
+  useEffect(() => {
+    // Reset state when user changes
+    if (!user) {
+      setIsProvider(false);
+      hasCheckedProviderRef.current = false;
+      return;
+    }
+
+    // Only check if not already checking and not already checked for this user
+    if (checkingProvider || hasCheckedProviderRef.current) return;
+
+    const checkProviderStatus = async () => {
+      hasCheckedProviderRef.current = true;
+      setCheckingProvider(true);
+      try {
+        const token = await getIdToken();
+        if (!token) {
+          setIsProvider(false);
+          setCheckingProvider(false);
+          hasCheckedProviderRef.current = false;
+          return;
+        }
+
+        const response = await fetch(`${API_URL}/api/providers/check`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+        setIsProvider(data.isProvider || false);
+      } catch (error) {
+        console.error('Error checking provider status:', error);
+        setIsProvider(false);
+      } finally {
+        setCheckingProvider(false);
+      }
+    };
+
+    if (user && !loading) {
+      checkProviderStatus();
+    }
+  }, [user, loading, getIdToken]);
 
   // Fetch notifications
   useEffect(() => {
@@ -172,16 +220,30 @@ export default function Navbar({ onLinkClick }: NavbarProps) {
     return user?.email?.[0].toUpperCase() || 'U';
   };
 
+  // Build nav links based on user and provider status
+  // Only show conditional links after provider check is complete (prevents flashing)
+  const isCheckingProvider = user && isProvider === null;
+  
   const navLinks = [
     { href: '/', label: 'Home' },
-    { href: '/services', label: 'All Services' },
-    { href: '/become-provider', label: 'Become a Provider' },
-    ...(user
+    // Don't show conditional links while checking provider status
+    ...(isCheckingProvider
       ? []
+      : isProvider === true
+      ? [{ href: '/provider/dashboard', label: 'Dashboard' }]
       : [
+          { href: '/services', label: 'All Services' },
+          { href: '/become-provider', label: 'Become a Provider' },
+        ]),
+    // Auth links for non-logged-in users
+    ...(user && !isCheckingProvider
+      ? []
+      : !user
+      ? [
           { href: '/signin', label: 'Sign In' },
           { href: '/join', label: 'Join' },
-        ]),
+        ]
+      : []),
   ];
 
   const isActive = (href: string) => {
