@@ -131,8 +131,9 @@ export default function ProviderDashboardPage() {
         linkedinUrl: data.provider.linkedinUrl || '',
         twitterUrl: data.provider.twitterUrl || '',
       });
-    } catch (err: any) {
-      setError(err.message || 'Failed to load dashboard');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load dashboard';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -178,8 +179,9 @@ export default function ProviderDashboardPage() {
       setIsEditing(false);
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
-    } catch (err: any) {
-      setError(err.message || 'Failed to update profile');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to update profile';
+      setError(errorMessage);
     } finally {
       setSaving(false);
     }
@@ -250,14 +252,58 @@ export default function ProviderDashboardPage() {
     return category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, ' ');
   };
 
+  const getUserInitials = () => {
+    if (user?.displayName) {
+      return user.displayName
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2);
+    }
+    return user?.email?.[0].toUpperCase() || 'P';
+  };
+
   return (
     <main className="min-h-screen bg-gray-50">
       <Header />
       <section className="py-12 sm:py-16 md:py-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Profile Header */}
+          <div className="bg-gradient-to-r from-green-400 to-green-600 rounded-xl shadow-lg p-6 sm:p-8 mb-8">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+              {/* Profile Picture */}
+              <div className="relative">
+                {user?.photoURL ? (
+                  <img
+                    src={user.photoURL}
+                    alt={user.displayName || user.email || 'Provider'}
+                    className="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-white shadow-lg object-cover"
+                  />
+                ) : (
+                  <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-white text-green-600 flex items-center justify-center text-3xl sm:text-4xl font-bold border-4 border-white shadow-lg">
+                    {getUserInitials()}
+                  </div>
+                )}
+                <div className="absolute bottom-0 right-0 w-6 h-6 sm:w-8 sm:h-8 bg-green-500 rounded-full border-4 border-white"></div>
+              </div>
+
+              {/* User Info */}
+              <div className="flex-1 text-center sm:text-left">
+                <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+                  {user?.displayName || user?.email?.split('@')[0] || 'Provider'}
+                </h1>
+                <p className="text-white/90 text-sm sm:text-base mb-2">{user?.email}</p>
+                {provider && (
+                  <p className="text-white/90 text-lg font-semibold">{provider.businessName}</p>
+                )}
+              </div>
+            </div>
+          </div>
+
           <div className="mb-8 flex justify-between items-center">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">Provider Dashboard</h1>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Provider Dashboard</h2>
               <p className="text-gray-600">Manage your provider profile</p>
             </div>
             {!isEditing && (

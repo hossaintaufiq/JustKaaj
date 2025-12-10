@@ -230,10 +230,14 @@ export default function Navbar({ onLinkClick }: NavbarProps) {
     ...(isCheckingProvider
       ? []
       : isProvider === true
-      ? [{ href: '/provider/dashboard', label: 'Dashboard' }]
+      ? [
+          { href: '/provider/dashboard', label: 'Dashboard' },
+          { href: '/provider/bookings', label: 'Bookings' },
+        ]
       : [
           { href: '/services', label: 'All Services' },
           { href: '/become-provider', label: 'Become a Provider' },
+          { href: '/my-bookings', label: 'My Bookings' },
         ]),
     // Auth links for non-logged-in users
     ...(user && !isCheckingProvider
@@ -338,10 +342,12 @@ export default function Navbar({ onLinkClick }: NavbarProps) {
                         className={`px-4 py-3 hover:bg-gray-50 cursor-pointer border-l-4 ${
                           notification.isRead
                             ? 'border-transparent'
-                            : notification.type === 'application_approved'
+                            : notification.type === 'application_approved' || notification.type === 'booking_accepted'
                             ? 'border-green-500'
-                            : notification.type === 'application_rejected'
+                            : notification.type === 'application_rejected' || notification.type === 'booking_rejected'
                             ? 'border-red-500'
+                            : notification.type === 'booking_request' || notification.type === 'booking_confirmation'
+                            ? 'border-blue-500'
                             : 'border-yellow-500'
                         }`}
                       >
@@ -507,10 +513,12 @@ export default function Navbar({ onLinkClick }: NavbarProps) {
                           className={`px-4 py-3 hover:bg-gray-50 cursor-pointer border-l-4 ${
                             notification.isRead
                               ? 'border-transparent'
-                              : notification.type === 'application_approved'
+                              : notification.type === 'application_approved' || notification.type === 'booking_accepted'
                               ? 'border-green-500'
-                              : notification.type === 'application_rejected'
+                              : notification.type === 'application_rejected' || notification.type === 'booking_rejected'
                               ? 'border-red-500'
+                              : notification.type === 'booking_request' || notification.type === 'booking_confirmation'
+                              ? 'border-blue-500'
                               : 'border-yellow-500'
                           }`}
                         >

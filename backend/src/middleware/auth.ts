@@ -29,11 +29,21 @@ export const verifyToken = async (
     // Verify the Firebase ID token
     const decodedToken = await admin.auth().verifyIdToken(token);
 
+    // Get user record to access displayName
+    let displayName: string | undefined;
+    try {
+      const userRecord = await admin.auth().getUser(decodedToken.uid);
+      displayName = userRecord.displayName;
+    } catch (userError) {
+      // If we can't get user record, continue without displayName
+      console.warn('Could not fetch user record for displayName:', userError);
+    }
+
     // Attach user info to request
     req.user = {
       uid: decodedToken.uid,
       email: decodedToken.email || '',
-      name: decodedToken.name,
+      name: displayName || decodedToken.name || undefined,
     };
 
     next();

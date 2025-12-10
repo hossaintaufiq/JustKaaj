@@ -2,10 +2,12 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface INotification extends Document {
   userId: string; // Firebase UID
-  type: 'application_approved' | 'application_rejected' | 'application_on_hold';
+  type: 'application_approved' | 'application_rejected' | 'application_on_hold' | 'booking_request' | 'booking_accepted' | 'booking_rejected' | 'booking_confirmation';
   title: string;
   message: string;
   applicationId?: mongoose.Types.ObjectId;
+  bookingId?: string;
+  metadata?: Record<string, any>;
   isRead: boolean;
   createdAt: Date;
 }
@@ -19,7 +21,7 @@ const NotificationSchema = new Schema<INotification>(
     },
     type: {
       type: String,
-      enum: ['application_approved', 'application_rejected', 'application_on_hold'],
+      enum: ['application_approved', 'application_rejected', 'application_on_hold', 'booking_request', 'booking_accepted', 'booking_rejected', 'booking_confirmation'],
       required: true,
     },
     title: {
@@ -33,6 +35,12 @@ const NotificationSchema = new Schema<INotification>(
     applicationId: {
       type: Schema.Types.ObjectId,
       ref: 'ProviderApplication',
+    },
+    bookingId: {
+      type: String,
+    },
+    metadata: {
+      type: Schema.Types.Mixed,
     },
     isRead: {
       type: Boolean,

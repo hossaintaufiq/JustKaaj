@@ -54,8 +54,10 @@ app.get('/health', (req: Request, res: Response) => {
 // API Routes
 import providerRoutes from './routes/providerRoutes';
 import adminRoutes from './routes/adminRoutes';
+import bookingRoutes from './routes/bookingRoutes';
 app.use('/api/providers', providerRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/bookings', bookingRoutes);
 
 // Start server
 app.listen(PORT, () => {
