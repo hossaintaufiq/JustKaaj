@@ -10,28 +10,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout the repo
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      # 2️⃣ SSH & Deploy
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
+          timeout: 1800  # 30 minutes
           script: |
+            # Go to project folder
             cd /var/www/justkaaj
             git fetch origin main
             git reset --hard origin/main
 
+            ##############
             # Backend
+            ##############
             cd backend
-            npm install 
-            npm run build 
-            pm2 restart backend --update-env || pm2 start dist/server.js --name backend
-
-            # Frontend (Next.js SSR)
-            cd ../frontend
-            npm install 
+            echo "Installing backend dependencies..."
+            npm install
+            echo "Building backend..."
             npm run build
-            pm2 restart frontend --update-env || pm2 start npm --name frontend -- start
+            echo "Restarting backend with PM2..."
+            pm2 reload backend --update-env || pm2 start dist/server.js --name backend
+
+            ##############
+            # Frontend (Next.js SSR)
+            ##############
+            cd ../frontend
+            echo "Installing frontend dependencies..."
+            npm install
+            echo "Building frontend..."
+            npm run build
+            echo "Restarting frontend with PM2..."
+            pm2 reload frontend --update-env || pm2 start npm --name frontend -- start
