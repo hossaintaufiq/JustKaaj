@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -12,8 +12,17 @@ export default function SignInPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signIn, signInWithGoogle } = useAuth();
+  const { signIn, signInWithGoogle, user } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect') || '/';
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      router.push(redirect);
+    }
+  }, [user, redirect, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,7 +31,7 @@ export default function SignInPage() {
 
     try {
       await signIn(email, password);
-      router.push('/');
+      router.push(redirect);
     } catch (err: any) {
       setError(err.message || 'Failed to sign in. Please check your credentials.');
     } finally {
@@ -36,7 +45,7 @@ export default function SignInPage() {
 
     try {
       await signInWithGoogle();
-      router.push('/');
+      router.push(redirect);
     } catch (err: any) {
       setError(err.message || 'Failed to sign in with Google.');
     } finally {

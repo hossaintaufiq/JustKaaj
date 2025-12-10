@@ -9,33 +9,119 @@ interface NavbarProps {
   onLinkClick?: () => void;
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
+interface Notification {
+  _id: string;
+  type: 'application_approved' | 'application_rejected' | 'application_on_hold';
+  title: string;
+  message: string;
+  isRead: boolean;
+  createdAt: string;
+}
+
 export default function Navbar({ onLinkClick }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [isNotificationMenuOpen, setIsNotificationMenuOpen] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
   const pathname = usePathname();
   const router = useRouter();
-  const { user, signOut, loading } = useAuth();
+  const { user, signOut, loading, getIdToken } = useAuth();
   const profileMenuRef = useRef<HTMLDivElement>(null);
+  const notificationMenuRef = useRef<HTMLDivElement>(null);
+
+  // Fetch notifications
+  useEffect(() => {
+    if (user && !loading) {
+      fetchNotifications();
+      // Poll for new notifications every 30 seconds
+      const interval = setInterval(fetchNotifications, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [user, loading]);
+
+  const fetchNotifications = async () => {
+    if (!user) return;
+    try {
+      const token = await getIdToken();
+      if (!token) return;
+
+      const response = await fetch(`${API_URL}/api/providers/notifications`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setNotifications(data.notifications || []);
+        setUnreadCount(data.unreadCount || 0);
+      }
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    }
+  };
+
+  const markAsRead = async (notificationId: string) => {
+    try {
+      const token = await getIdToken();
+      if (!token) return;
+
+      await fetch(`${API_URL}/api/providers/notifications/${notificationId}/read`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      fetchNotifications();
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
+  };
+
+  const markAllAsRead = async () => {
+    try {
+      const token = await getIdToken();
+      if (!token) return;
+
+      await fetch(`${API_URL}/api/providers/notifications/read-all`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      fetchNotifications();
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error);
+    }
+  };
 
   // Close profile menu on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         profileMenuRef.current &&
-        !profileMenuRef.current.contains(event.target as Node)
+        !profileMenuRef.current.contains(event.target as Node) &&
+        notificationMenuRef.current &&
+        !notificationMenuRef.current.contains(event.target as Node)
       ) {
         setIsProfileMenuOpen(false);
+        setIsNotificationMenuOpen(false);
       }
     };
 
-    if (isProfileMenuOpen) {
+    if (isProfileMenuOpen || isNotificationMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isProfileMenuOpen]);
+  }, [isProfileMenuOpen, isNotificationMenuOpen]);
 
   const handleLinkClick = () => {
     setIsMenuOpen(false);
@@ -127,7 +213,100 @@ export default function Navbar({ onLinkClick }: NavbarProps) {
               )}
             </Link>
           );
-        })}
+        }        )}
+
+        {/* Notifications - Desktop */}
+        {!loading && user && (
+          <div className="relative mr-2" ref={notificationMenuRef}>
+            <button
+              onClick={() => {
+                setIsNotificationMenuOpen(!isNotificationMenuOpen);
+                setIsProfileMenuOpen(false);
+              }}
+              className="relative p-2 text-gray-700 hover:text-green-500 transition-colors"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+              </svg>
+              {unreadCount > 0 && (
+                <span className="absolute top-0 right-0 block h-5 w-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
+            </button>
+
+            {/* Notifications Dropdown */}
+            {isNotificationMenuOpen && (
+              <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-h-96 overflow-y-auto">
+                <div className="p-4 border-b flex justify-between items-center">
+                  <h3 className="font-semibold text-gray-900">Notifications</h3>
+                  {unreadCount > 0 && (
+                    <button
+                      onClick={markAllAsRead}
+                      className="text-sm text-blue-600 hover:text-blue-800"
+                    >
+                      Mark all as read
+                    </button>
+                  )}
+                </div>
+                <div className="py-2">
+                  {notifications.length === 0 ? (
+                    <div className="px-4 py-8 text-center text-gray-500">
+                      No notifications
+                    </div>
+                  ) : (
+                    notifications.map((notification) => (
+                      <div
+                        key={notification._id}
+                        onClick={() => {
+                          if (!notification.isRead) {
+                            markAsRead(notification._id);
+                          }
+                        }}
+                        className={`px-4 py-3 hover:bg-gray-50 cursor-pointer border-l-4 ${
+                          notification.isRead
+                            ? 'border-transparent'
+                            : notification.type === 'application_approved'
+                            ? 'border-green-500'
+                            : notification.type === 'application_rejected'
+                            ? 'border-red-500'
+                            : 'border-yellow-500'
+                        }`}
+                      >
+                        <div className="flex items-start">
+                          <div className="flex-1">
+                            <p className={`text-sm font-medium ${notification.isRead ? 'text-gray-700' : 'text-gray-900'}`}>
+                              {notification.title}
+                            </p>
+                            <p className="text-sm text-gray-600 mt-1">
+                              {notification.message}
+                            </p>
+                            <p className="text-xs text-gray-400 mt-1">
+                              {new Date(notification.createdAt).toLocaleString()}
+                            </p>
+                          </div>
+                          {!notification.isRead && (
+                            <div className="w-2 h-2 bg-blue-500 rounded-full ml-2 mt-1"></div>
+                          )}
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* User Profile Avatar - Desktop */}
         {!loading && user && (

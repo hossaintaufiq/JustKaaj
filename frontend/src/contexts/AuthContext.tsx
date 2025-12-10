@@ -10,6 +10,7 @@ import {
   signOut as firebaseSignOut,
   onAuthStateChanged,
 } from 'firebase/auth';
+import { getIdToken } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 
 interface AuthContextType {
@@ -19,6 +20,7 @@ interface AuthContextType {
   signUp: (email: string, password: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
+  getIdToken: () => Promise<string | null>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -81,6 +83,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const getToken = async (): Promise<string | null> => {
+    try {
+      if (user) {
+        return await getIdToken(user);
+      }
+      return null;
+    } catch (error: any) {
+      console.error('Error getting token:', error);
+      return null;
+    }
+  };
+
   const value: AuthContextType = {
     user,
     loading,
@@ -88,6 +102,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signUp,
     signInWithGoogle,
     signOut,
+    getIdToken: getToken,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

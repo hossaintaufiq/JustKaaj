@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/contexts/AuthContext';
@@ -17,8 +17,10 @@ export default function JoinPage() {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signUp, signInWithGoogle } = useAuth();
+  const { signUp, signInWithGoogle, user } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect') || '/';
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -28,6 +30,13 @@ export default function JoinPage() {
     }));
     setError(''); // Clear error when user types
   };
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      router.push(redirect);
+    }
+  }, [user, redirect, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,7 +62,7 @@ export default function JoinPage() {
     try {
       await signUp(formData.email, formData.password);
       // User data (name, phone) can be saved to MongoDB via backend API
-      router.push('/');
+      router.push(redirect);
     } catch (err: any) {
       setError(err.message || 'Failed to create account. Please try again.');
     } finally {
@@ -67,7 +76,7 @@ export default function JoinPage() {
 
     try {
       await signInWithGoogle();
-      router.push('/');
+      router.push(redirect);
     } catch (err: any) {
       setError(err.message || 'Failed to sign up with Google.');
     } finally {

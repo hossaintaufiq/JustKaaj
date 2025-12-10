@@ -51,8 +51,16 @@ app.get('/health', (req: Request, res: Response) => {
   });
 });
 
+// API Routes
+import providerRoutes from './routes/providerRoutes';
+import adminRoutes from './routes/adminRoutes';
+app.use('/api/providers', providerRoutes);
+app.use('/api/admin', adminRoutes);
+
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on http://localhost:${PORT}`);
+  console.log(`📋 Admin login endpoint: http://localhost:${PORT}/api/admin/login`);
+  console.log(`🔐 Admin credentials: justkaaj25@gmail.com / justkaaj@2025`);
 });
 
