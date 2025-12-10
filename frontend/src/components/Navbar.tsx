@@ -13,7 +13,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 interface Notification {
   _id: string;
-  type: 'application_approved' | 'application_rejected' | 'application_on_hold';
+  type: 'application_approved' | 'application_rejected' | 'application_on_hold' | 'booking_request' | 'booking_accepted' | 'booking_rejected' | 'booking_confirmation';
   title: string;
   message: string;
   isRead: boolean;
@@ -342,13 +342,13 @@ export default function Navbar({ onLinkClick }: NavbarProps) {
                         className={`px-4 py-3 hover:bg-gray-50 cursor-pointer border-l-4 ${
                           notification.isRead
                             ? 'border-transparent'
-                            : notification.type === 'application_approved' || notification.type === 'booking_accepted'
+                            : notification.type === 'application_approved' || notification.type === 'booking_accepted' || notification.type === 'booking_confirmation'
                             ? 'border-green-500'
                             : notification.type === 'application_rejected' || notification.type === 'booking_rejected'
                             ? 'border-red-500'
-                            : notification.type === 'booking_request' || notification.type === 'booking_confirmation'
-                            ? 'border-blue-500'
-                            : 'border-yellow-500'
+                            : notification.type === 'application_on_hold' || notification.type === 'booking_request'
+                            ? 'border-yellow-500'
+                            : 'border-blue-500'
                         }`}
                       >
                         <div className="flex items-start">

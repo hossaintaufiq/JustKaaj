@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/contexts/AuthContext';
 
-export default function JoinPage() {
+function JoinContent() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -359,5 +359,21 @@ export default function JoinPage() {
       </section>
       <Footer />
     </main>
+  );
+}
+
+export default function JoinPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-gray-600">Loading...</div>
+        </div>
+        <Footer />
+      </main>
+    }>
+      <JoinContent />
+    </Suspense>
   );
 }

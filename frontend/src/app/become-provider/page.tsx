@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -8,7 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
-export default function BecomeProviderPage() {
+function BecomeProviderContent() {
   const { user, loading, getIdToken } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -763,6 +763,22 @@ export default function BecomeProviderPage() {
 
       <Footer />
     </main>
+  );
+}
+
+export default function BecomeProviderPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-gray-600">Loading...</div>
+        </div>
+        <Footer />
+      </main>
+    }>
+      <BecomeProviderContent />
+    </Suspense>
   );
 }
 
