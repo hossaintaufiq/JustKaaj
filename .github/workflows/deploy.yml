@@ -25,13 +25,13 @@ jobs:
             git reset --hard origin/main
 
             # Backend
-            cd Server
+            cd backend
             npm install 
             npm run build 
             pm2 restart server --update-env || pm2 start dist/server.js --name Server
 
             # Frontend (Next.js SSR)
-            cd ../Client
+            cd ../frontend
             npm install 
             npm run build
             pm2 restart client --update-env || pm2 start npm --name Client -- start
